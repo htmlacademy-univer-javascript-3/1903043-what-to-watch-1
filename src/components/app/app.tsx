@@ -1,4 +1,16 @@
-import Main from "../../pages/Main";
+import React from "react";
+import Main from "../../pages/Main/Main";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import NotFound from "../../pages/NotFound/NotFound";
+import SignIn from "./../../pages/SignIn/SignIn";
+import MyList from "./../../pages/MyList/MyList";
+import Film from "./../../pages/Film/Film";
+import AddReview from "./../../pages/AddReview/AddReview";
+import Player from "./../../pages/Player/Player";
+import { AppRoute } from "../../const";
+import privateRoute from "../../private-route/PrivateRoute";
+import PrivateRoute from "./../../private-route/PrivateRoute";
+import { isatty } from "tty";
 
 const filmsList = [
   {
@@ -24,7 +36,30 @@ const filmsList = [
 ];
 
 function App(): JSX.Element {
-  return <Main filmsList={filmsList} />;
+  const [isAuth, setIsAuth] = React.useState(false);
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Main filmsList={filmsList} />} />
+        <Route path={AppRoute.Login} element={<SignIn />} />
+        <Route
+          path={AppRoute.MyList}
+          element={
+            <PrivateRoute isAuth={isAuth}>
+              <MyList />
+            </PrivateRoute>
+          }
+        />
+        <Route path={AppRoute.Film}>
+          <Route index element={<Film />} />
+          <Route path={AppRoute.AddReview} element={<AddReview />} />
+        </Route>
+        <Route path={AppRoute.PlayerId} element={<Player />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
