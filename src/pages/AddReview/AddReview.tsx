@@ -1,6 +1,13 @@
 import React from "react";
+import { filmType } from "../../types/filmType";
+import FormReview from "./FormReview/FormReview";
 
-const AddReview = () => {
+type typeProps = {
+  film: filmType;
+};
+
+const AddReview = ({ film }: typeProps) => {
+  const { title, imgUrl } = film;
   return (
     <>
       <div className="visually-hidden">
@@ -93,10 +100,7 @@ const AddReview = () => {
       <section className="film-card film-card--full">
         <div className="film-card__header">
           <div className="film-card__bg">
-            <img
-              src="img/bg-the-grand-budapest-hotel.jpg"
-              alt="The Grand Budapest Hotel"
-            />
+            <img src={imgUrl} alt={title} />
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
@@ -141,12 +145,7 @@ const AddReview = () => {
           </header>
 
           <div className="film-card__poster film-card__poster--small">
-            <img
-              src="img/the-grand-budapest-hotel-poster.jpg"
-              alt="The Grand Budapest Hotel poster"
-              width="218"
-              height="327"
-            />
+            <img src={imgUrl} alt={title} width="218" height="327" />
           </div>
         </div>
 
@@ -266,20 +265,7 @@ const AddReview = () => {
                 </label>
               </div>
             </div>
-
-            <div className="add-review__text">
-              <textarea
-                className="add-review__textarea"
-                name="review-text"
-                id="review-text"
-                placeholder="Review text"
-              ></textarea>
-              <div className="add-review__submit">
-                <button className="add-review__btn" type="submit">
-                  Post
-                </button>
-              </div>
-            </div>
+            <FormReview />
           </form>
         </div>
       </section>

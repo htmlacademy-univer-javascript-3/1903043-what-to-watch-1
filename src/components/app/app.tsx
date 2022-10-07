@@ -8,54 +8,44 @@ import Film from "./../../pages/Film/Film";
 import AddReview from "./../../pages/AddReview/AddReview";
 import Player from "./../../pages/Player/Player";
 import { AppRoute } from "../../const";
-import privateRoute from "../../private-route/PrivateRoute";
 import PrivateRoute from "./../../private-route/PrivateRoute";
-import { isatty } from "tty";
+import { filmType } from "../../types/filmType";
+import { myList } from "./../../mocks/myList";
 
-const filmsList = [
-  {
-    id: 0,
-    imgUrl: "img/fantastic-beasts-the-crimes-of-grindelwald.jpg",
-    title: "Fantastic Beasts: The Crimes of Grindelwald",
-  },
-  {
-    id: 1,
-    imgUrl: "img/bohemian-rhapsody.jpg",
-    title: "Bohemian Rhapsody",
-  },
-  {
-    id: 2,
-    imgUrl: "img/macbeth.jpg",
-    title: "Macbeth",
-  },
-  {
-    id: 3,
-    imgUrl: "img/aviator.jpg",
-    title: "Aviator",
-  },
-];
+type typeProps = {
+  filmsList: filmType[];
+};
 
-function App(): JSX.Element {
-  const [isAuth, setIsAuth] = React.useState(false);
+function App({ filmsList }: typeProps): JSX.Element {
+  const [isAuth, setIsAuth] = React.useState(true);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Main filmsList={filmsList} />} />
+        <Route
+          path="/"
+          element={<Main filmsList={filmsList} lengthMyList={myList.length} />}
+        />
         <Route path={AppRoute.Login} element={<SignIn />} />
         <Route
           path={AppRoute.MyList}
           element={
             <PrivateRoute isAuth={isAuth}>
-              <MyList />
+              <MyList myList={myList} />
             </PrivateRoute>
           }
         />
         <Route path={AppRoute.Film}>
           <Route index element={<Film />} />
-          <Route path={AppRoute.AddReview} element={<AddReview />} />
+          <Route
+            path={AppRoute.AddReview}
+            element={<AddReview film={filmsList[0]} />}
+          />
         </Route>
-        <Route path={AppRoute.PlayerId} element={<Player />} />
+        <Route
+          path={AppRoute.PlayerId}
+          element={<Player videoUrl={filmsList[0].videoUrl} />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

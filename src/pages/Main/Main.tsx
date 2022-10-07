@@ -1,12 +1,24 @@
-import Card from "../../components/Card";
+import { filmType } from "../../types/filmType";
+import FilmsList from "../../components/FilmsList";
+import { useNavigate } from "react-router-dom";
+import { AppRoute } from "../../const";
 
-type typeFilm = {
-  id: number;
-  imgUrl: string;
-  title: string;
+type typeProps = {
+  filmsList: filmType[];
+  lengthMyList: number;
 };
 
-const Main = function ({ filmsList }: { filmsList: typeFilm[] }) {
+const Main = function ({ filmsList, lengthMyList }: typeProps) {
+  const navigate = useNavigate();
+
+  const handlePlay = () => {
+    navigate("/player/1");
+  };
+
+  const handleSeeList = () => {
+    navigate(AppRoute.MyList);
+  };
+
   return (
     <>
       <div className="visually-hidden">
@@ -161,6 +173,7 @@ const Main = function ({ filmsList }: { filmsList: typeFilm[] }) {
                 <button
                   className="btn btn--play film-card__button"
                   type="button"
+                  onClick={handlePlay}
                 >
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
@@ -174,8 +187,8 @@ const Main = function ({ filmsList }: { filmsList: typeFilm[] }) {
                   <svg viewBox="0 0 19 20" width="19" height="20">
                     <use xlinkHref="#add"></use>
                   </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">9</span>
+                  <span onClick={handleSeeList}>My list</span>
+                  <span className="film-card__count">{lengthMyList}</span>
                 </button>
               </div>
             </div>
@@ -241,14 +254,7 @@ const Main = function ({ filmsList }: { filmsList: typeFilm[] }) {
           </ul>
 
           <div className="catalog__films-list">
-            {filmsList.map((film) => (
-              <Card
-                id={film.id}
-                imgUrl={film.imgUrl}
-                title={film.title}
-                key={film.id}
-              />
-            ))}
+            <FilmsList filmsList={filmsList} />
           </div>
 
           <div className="catalog__more">
