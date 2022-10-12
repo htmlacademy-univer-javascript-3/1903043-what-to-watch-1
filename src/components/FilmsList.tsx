@@ -7,17 +7,34 @@ type typeProps = {
 };
 
 const FilmsList = ({ filmsList }: typeProps) => {
-  const [activeFilm, setActiveFilm] = React.useState(-1);
+  const [activeFilm, setActiveFilm] = React.useState<number | null>(null);
 
-  const handleMouseOver = (filmId: number) => {
+  React.useEffect(() => {
+    const handleMouseOver = (e: any) => {
+      if (
+        !e.target.parentElement.classList.contains("small-film-card") &&
+        !e.target.parentElement.classList.contains("film-link")
+      ) {
+        setActiveFilm(null);
+      }
+    };
+
+    document.addEventListener("mouseover", handleMouseOver);
+  }, []);
+
+  const handleMouseOverFilm = (filmId: number) => {
     setActiveFilm(filmId);
-    console.log(filmId);
   };
 
   return (
     <>
       {filmsList.map((film) => (
-        <Card film={film} key={film.id} handleMouseOver={handleMouseOver} />
+        <Card
+          film={film}
+          key={film.id}
+          handleMouseOverFilm={handleMouseOverFilm}
+          isPlaying={film.id === activeFilm}
+        />
       ))}
     </>
   );
