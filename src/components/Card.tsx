@@ -29,7 +29,7 @@ function Card({ film, handleMouseOverFilm, isPlaying }: typeProps) {
       onMouseOut={clearTimeOutOver}
     >
       {isPlaying ? (
-        <VideoPlayer src={videoUrl} />
+        <VideoPlayer src={videoUrl} muted autoPlay />
       ) : (
         <Link to={`films/${id}`} className="film-link">
           <div className="small-film-card__image">

@@ -2,11 +2,13 @@ import React from "react";
 
 type propsType = {
   src: string;
+  muted: boolean;
+  autoPlay: boolean;
 };
 
-const VideoPlayer = ({ src }: propsType) => {
+const VideoPlayer = ({ src, muted, autoPlay }: propsType) => {
   return (
-    <video width={300} autoPlay muted>
+    <video width={300} autoPlay={autoPlay} muted={muted}>
       <source src={src} type="video/mp4" />
     </video>
   );
