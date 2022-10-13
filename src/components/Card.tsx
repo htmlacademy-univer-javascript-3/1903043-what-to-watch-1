@@ -5,8 +5,8 @@ import VideoPlayer from "./VideoPlayer";
 
 type typeProps = {
   film: filmType;
-  isPlaying: boolean;
-  handleMouseOverFilm: (filmId: number) => void;
+  isPlaying?: boolean;
+  handleMouseOverFilm?: (filmId: number) => void;
 };
 
 function Card({ film, handleMouseOverFilm, isPlaying }: typeProps) {
@@ -15,6 +15,7 @@ function Card({ film, handleMouseOverFilm, isPlaying }: typeProps) {
   let timeout: any;
 
   const setTimeOutOver = () => {
+    if (!handleMouseOverFilm) return;
     timeout = setTimeout(() => handleMouseOverFilm(id), 1000);
   };
 
@@ -31,7 +32,7 @@ function Card({ film, handleMouseOverFilm, isPlaying }: typeProps) {
       {isPlaying ? (
         <VideoPlayer src={videoUrl} muted autoPlay />
       ) : (
-        <Link to={`films/${id}`} className="film-link">
+        <Link to={`/films/${id}`} className="film-link">
           <div className="small-film-card__image">
             <img src={imgUrl} alt={title} width="280" height="175" />
           </div>

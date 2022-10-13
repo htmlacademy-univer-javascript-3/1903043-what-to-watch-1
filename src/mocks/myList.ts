@@ -3,6 +3,7 @@ import { filmType } from "../types/filmType";
 export const myList: filmType[] = [
   {
     id: 0,
+    genre: "comedy",
     imgUrl: "img/fantastic-beasts-the-crimes-of-grindelwald.jpg",
     rating: 8.9,
     videoUrl:
@@ -13,6 +14,7 @@ export const myList: filmType[] = [
   },
   {
     id: 1,
+    genre: "horrors",
     imgUrl: "img/bohemian-rhapsody.jpg",
     rating: 8.9,
     videoUrl:
@@ -23,6 +25,7 @@ export const myList: filmType[] = [
   },
   {
     id: 3,
+    genre: "comedy",
     imgUrl: "img/aviator.jpg",
     rating: 8.9,
     videoUrl:
@@ -33,6 +36,7 @@ export const myList: filmType[] = [
   },
   {
     id: 4,
+    genre: "comedy",
     imgUrl: "img/we-need-to-talk-about-kevin.jpg",
     rating: 8.9,
     videoUrl:
@@ -43,6 +47,7 @@ export const myList: filmType[] = [
   },
   {
     id: 7,
+    genre: "comedy",
     imgUrl: "img/johnny-english.jpg",
     rating: 8.9,
     videoUrl:
