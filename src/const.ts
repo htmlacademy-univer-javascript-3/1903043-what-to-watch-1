@@ -6,3 +6,9 @@ export enum AppRoute {
   PlayerId = "/player/:id",
   NotFound = "*",
 }
+
+export enum FilmTabName {
+  Overview = "Overview",
+  Details = "Details",
+  Reviews = "Reviews",
+}

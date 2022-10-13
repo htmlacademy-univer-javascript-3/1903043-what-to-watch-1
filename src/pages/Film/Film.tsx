@@ -1,13 +1,17 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AppRoute } from "../../const";
+import FilmTab from "./../../components/FilmTab/";
+import { AppRoute, FilmTabName } from "../../const";
 import { filmsList } from "../../mocks/films";
 import { myList } from "./../../mocks/myList";
+import Card from "../../components/Card";
+import FilmsList from "../../components/FilmsList";
 
 const Film = () => {
   const navigate = useNavigate();
   const id = Number(window.location.href.split("/").at(-1));
-  const { imgUrl, title, description, rating } = filmsList[id];
+  const { imgUrl, title, description, rating, genre } = filmsList[id];
+  const [activeTab, setActiveTab] = React.useState(FilmTabName.Overview);
 
   const handlePlay = () => {
     navigate(`/player/${id}`);
@@ -199,46 +203,24 @@ const Film = () => {
             <div className="film-card__desc">
               <nav className="film-nav film-card__nav">
                 <ul className="film-nav__list">
-                  <li className="film-nav__item film-nav__item--active">
-                    <a href="#" className="film-nav__link">
-                      Overview
-                    </a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">
-                      Details
-                    </a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">
-                      Reviews
-                    </a>
-                  </li>
+                  {Object.values(FilmTabName).map((filmTabName) => (
+                    <li
+                      className={`film-nav__item  ${
+                        filmTabName == activeTab ? "film-nav__item--active" : ""
+                      }`}
+                      onClick={() => setActiveTab(filmTabName)}
+                    >
+                      <a className="film-nav__link">{filmTabName}</a>
+                    </li>
+                  ))}
                 </ul>
               </nav>
 
-              <div className="film-rating">
-                <div className="film-rating__score">{rating}</div>
-                <p className="film-rating__meta">
-                  <span className="film-rating__level">Very good</span>
-                  <span className="film-rating__count">240 ratings</span>
-                </p>
-              </div>
-
-              <div className="film-card__text">
-                {description}
-
-                <p className="film-card__director">
-                  <strong>Director: Wes Anderson</strong>
-                </p>
-
-                <p className="film-card__starring">
-                  <strong>
-                    Starring: Bill Murray, Edward Norton, Jude Law, Willem Dafoe
-                    and other
-                  </strong>
-                </p>
-              </div>
+              <FilmTab
+                activeTab={activeTab}
+                description={description}
+                rating={rating}
+              />
             </div>
           </div>
         </div>
@@ -249,69 +231,13 @@ const Film = () => {
           <h2 className="catalog__title">More like this</h2>
 
           <div className="catalog__films-list">
-            <article className="small-film-card catalog__films-card">
-              <div className="small-film-card__image">
-                <img
-                  src="img/fantastic-beasts-the-crimes-of-grindelwald.jpg"
-                  alt="Fantastic Beasts: The Crimes of Grindelwald"
-                  width="280"
-                  height="175"
-                />
-              </div>
-              <h3 className="small-film-card__title">
-                <a className="small-film-card__link" href="film-page.html">
-                  Fantastic Beasts: The Crimes of Grindelwald
-                </a>
-              </h3>
-            </article>
-
-            <article className="small-film-card catalog__films-card">
-              <div className="small-film-card__image">
-                <img
-                  src="img/bohemian-rhapsody.jpg"
-                  alt="Bohemian Rhapsody"
-                  width="280"
-                  height="175"
-                />
-              </div>
-              <h3 className="small-film-card__title">
-                <a className="small-film-card__link" href="film-page.html">
-                  Bohemian Rhapsody
-                </a>
-              </h3>
-            </article>
-
-            <article className="small-film-card catalog__films-card">
-              <div className="small-film-card__image">
-                <img
-                  src="img/macbeth.jpg"
-                  alt="Macbeth"
-                  width="280"
-                  height="175"
-                />
-              </div>
-              <h3 className="small-film-card__title">
-                <a className="small-film-card__link" href="film-page.html">
-                  Macbeth
-                </a>
-              </h3>
-            </article>
-
-            <article className="small-film-card catalog__films-card">
-              <div className="small-film-card__image">
-                <img
-                  src="img/aviator.jpg"
-                  alt="Aviator"
-                  width="280"
-                  height="175"
-                />
-              </div>
-              <h3 className="small-film-card__title">
-                <a className="small-film-card__link" href="film-page.html">
-                  Aviator
-                </a>
-              </h3>
-            </article>
+            {
+              <FilmsList
+                filmsList={filmsList
+                  .filter((film) => film.genre == genre)
+                  .slice(0, 4)}
+              />
+            }
           </div>
         </section>
 
