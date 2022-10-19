@@ -3,7 +3,7 @@ import { filmType } from "../types/filmType";
 export const filmsList: filmType[] = [
   {
     id: 0,
-    genre: "comedy",
+    genre: "comedies",
     imgUrl: "img/fantastic-beasts-the-crimes-of-grindelwald.jpg",
     rating: 8.9,
     videoUrl:
@@ -14,7 +14,7 @@ export const filmsList: filmType[] = [
   },
   {
     id: 1,
-    genre: "horrors",
+    genre: "crime",
     imgUrl: "img/bohemian-rhapsody.jpg",
     rating: 8.9,
     videoUrl:
@@ -25,7 +25,7 @@ export const filmsList: filmType[] = [
   },
   {
     id: 2,
-    genre: "horrors",
+    genre: "crime",
     imgUrl: "img/macbeth.jpg",
     rating: 8.9,
     videoUrl:
@@ -36,7 +36,7 @@ export const filmsList: filmType[] = [
   },
   {
     id: 3,
-    genre: "comedy",
+    genre: "comedies",
     imgUrl: "img/aviator.jpg",
     rating: 8.9,
     videoUrl:
@@ -47,7 +47,7 @@ export const filmsList: filmType[] = [
   },
   {
     id: 4,
-    genre: "comedy",
+    genre: "comedies",
     imgUrl: "img/we-need-to-talk-about-kevin.jpg",
     rating: 8.9,
     videoUrl:
@@ -58,7 +58,7 @@ export const filmsList: filmType[] = [
   },
   {
     id: 5,
-    genre: "horrors",
+    genre: "crime",
     imgUrl: "img/what-we-do-in-the-shadows.jpg",
     rating: 8.9,
     videoUrl:
@@ -69,7 +69,7 @@ export const filmsList: filmType[] = [
   },
   {
     id: 6,
-    genre: "comedy",
+    genre: "comedies",
     imgUrl: "img/revenant.jpg",
     rating: 8.9,
     videoUrl:
@@ -80,7 +80,7 @@ export const filmsList: filmType[] = [
   },
   {
     id: 7,
-    genre: "comedy",
+    genre: "comedies",
     imgUrl: "img/johnny-english.jpg",
     rating: 8.9,
     videoUrl:

@@ -9,23 +9,17 @@ import AddReview from "./../../pages/AddReview/AddReview";
 import Player from "./../../pages/Player/Player";
 import { AppRoute } from "../../const";
 import PrivateRoute from "./../../private-route/PrivateRoute";
-import { filmType } from "../../types/filmType";
 import { myList } from "./../../mocks/myList";
+import { useSelector } from "react-redux";
 
-type typeProps = {
-  filmsList: filmType[];
-};
-
-function App({ filmsList }: typeProps): JSX.Element {
+function App(): JSX.Element {
   const [isAuth, setIsAuth] = React.useState(true);
+  const filmsList = useSelector((state: any) => state.films.baseFilms);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={<Main filmsList={filmsList} lengthMyList={myList.length} />}
-        />
+        <Route path="/" element={<Main lengthMyList={myList.length} />} />
         <Route path={AppRoute.Login} element={<SignIn />} />
         <Route
           path={AppRoute.MyList}
