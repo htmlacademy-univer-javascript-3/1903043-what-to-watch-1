@@ -1,3 +1,4 @@
+import React from "react";
 import FilmsList from "../../components/FilmsList";
 import { useNavigate } from "react-router-dom";
 import { AppRoute, FilmGenres } from "../../const";
@@ -16,6 +17,7 @@ type typeFilms = {
 const Main = function ({ lengthMyList }: typeProps) {
   const { genre: activeGenre, filteredFilms: filmsList }: typeFilms =
     useSelector((state: any) => state.films);
+  const [countFilmsShown, setCountFilmShown] = React.useState(8);
 
   const navigate = useNavigate();
 
@@ -25,6 +27,10 @@ const Main = function ({ lengthMyList }: typeProps) {
 
   const handleSeeList = () => {
     navigate(AppRoute.MyList);
+  };
+
+  const handleShowMore = () => {
+    setCountFilmShown(countFilmsShown + 8);
   };
 
   return (
@@ -213,13 +219,19 @@ const Main = function ({ lengthMyList }: typeProps) {
           </ul>
 
           <div className="catalog__films-list">
-            <FilmsList filmsList={filmsList} />
+            <FilmsList filmsList={filmsList.slice(0, countFilmsShown)} />
           </div>
 
           <div className="catalog__more">
-            <button className="catalog__button" type="button">
-              Show more
-            </button>
+            {countFilmsShown < filmsList.length && (
+              <button
+                className="catalog__button"
+                type="button"
+                onClick={handleShowMore}
+              >
+                Show more
+              </button>
+            )}
           </div>
         </section>
 
