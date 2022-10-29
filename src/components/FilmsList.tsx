@@ -1,12 +1,14 @@
 import React from "react";
 import Card from "./Card";
 import { filmType } from "../types/filmType";
+import LoadingSpinner from "./LoadingSpinner";
 
 type typeProps = {
   filmsList: filmType[];
+  isLoading: boolean;
 };
 
-const FilmsList = ({ filmsList }: typeProps) => {
+const FilmsList = ({ filmsList, isLoading }: typeProps) => {
   const [activeFilm, setActiveFilm] = React.useState<number | null>(null);
 
   React.useEffect(() => {
@@ -28,14 +30,18 @@ const FilmsList = ({ filmsList }: typeProps) => {
 
   return (
     <>
-      {filmsList.map((film) => (
-        <Card
-          film={film}
-          key={film.id}
-          handleMouseOverFilm={handleMouseOverFilm}
-          isPlaying={film.id === activeFilm}
-        />
-      ))}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        filmsList.map((film) => (
+          <Card
+            film={film}
+            key={film.id}
+            handleMouseOverFilm={handleMouseOverFilm}
+            isPlaying={film.id === activeFilm}
+          />
+        ))
+      )}
     </>
   );
 };

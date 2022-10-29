@@ -1,13 +1,12 @@
 import React from "react";
 import { filmType } from "../../types/filmType";
 import FormReview from "./FormReview/FormReview";
+import { useSelector } from "react-redux";
 
-type typeProps = {
-  film: filmType;
-};
-
-const AddReview = ({ film }: typeProps) => {
-  const { title, imgUrl } = film;
+const AddReview = () => {
+  const activeFilm: filmType = useSelector(
+    (state: any) => state.films.activeFilm
+  );
   return (
     <>
       <div className="visually-hidden">
@@ -100,7 +99,7 @@ const AddReview = ({ film }: typeProps) => {
       <section className="film-card film-card--full">
         <div className="film-card__header">
           <div className="film-card__bg">
-            <img src={imgUrl} alt={title} />
+            <img src={activeFilm.backgroundImage} alt={activeFilm.name} />
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
@@ -145,7 +144,12 @@ const AddReview = ({ film }: typeProps) => {
           </header>
 
           <div className="film-card__poster film-card__poster--small">
-            <img src={imgUrl} alt={title} width="218" height="327" />
+            <img
+              src={activeFilm.posterImage}
+              alt={activeFilm.name}
+              width="218"
+              height="327"
+            />
           </div>
         </div>
 

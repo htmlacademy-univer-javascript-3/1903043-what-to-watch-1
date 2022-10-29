@@ -9,36 +9,49 @@ import AddReview from "./../../pages/AddReview/AddReview";
 import Player from "./../../pages/Player/Player";
 import { AppRoute } from "../../const";
 import PrivateRoute from "./../../private-route/PrivateRoute";
-import { myList } from "./../../mocks/myList";
 import { useSelector } from "react-redux";
+import { filmType } from "../../types/filmType";
+import { fetchFilms } from "./../../store/api-actions";
+import store from "../../store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../types/store";
 
 function App(): JSX.Element {
+  type typeState = {
+    baseFilms: filmType[];
+    isLoading: boolean;
+  };
   const [isAuth, setIsAuth] = React.useState(true);
-  const filmsList = useSelector((state: any) => state.films.baseFilms);
+  const { baseFilms: filmsList, isLoading }: typeState = useSelector(
+    (state: any) => state.films
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  React.useEffect(() => {
+    dispatch(fetchFilms());
+  }, []);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Main lengthMyList={myList.length} />} />
+        <Route path="/" element={<Main lengthMyList={filmsList.length} />} />
         <Route path={AppRoute.Login} element={<SignIn />} />
         <Route
           path={AppRoute.MyList}
           element={
             <PrivateRoute isAuth={isAuth}>
-              <MyList myList={myList} />
+              <MyList myList={filmsList} isLoading={isLoading} />
             </PrivateRoute>
           }
         />
         <Route path={AppRoute.Film}>
           <Route index element={<Film />} />
-          <Route
-            path={AppRoute.AddReview}
-            element={<AddReview film={filmsList[0]} />}
-          />
+          <Route path={AppRoute.AddReview} element={<AddReview />} />
         </Route>
         <Route
           path={AppRoute.PlayerId}
-          element={<Player videoUrl={filmsList[0].videoUrl} />}
+          element={<Player videoUrl={filmsList[0]?.videoLink} />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>
