@@ -1,4 +1,5 @@
 export enum AppRoute {
+  Main = "/",
   Login = "/login",
   MyList = "/mylist",
   Film = "/films/:id",
@@ -28,4 +29,11 @@ export enum FilmGenres {
 export enum APIRoute {
   Films = "/films",
   ParticularFilm = "/film",
+  Login = "/login",
+}
+
+export enum AuthorizationStatus {
+  Unknown = "Unknown",
+  NoAuth = "NoAuth",
+  Auth = "Auth",
 }
