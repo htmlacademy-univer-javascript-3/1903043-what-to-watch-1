@@ -2,19 +2,22 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FilmTab from "./../../components/FilmTab/";
 import { AppRoute, FilmTabName } from "../../const";
-import { filmsList } from "../../mocks/films";
-import { myList } from "./../../mocks/myList";
 import Card from "../../components/Card";
 import FilmsList from "../../components/FilmsList";
+import { useSelector } from "react-redux";
+import { filmType } from "../../types/filmType";
 
 const Film = () => {
   const navigate = useNavigate();
-  const id = Number(window.location.href.split("/").at(-1));
-  const { imgUrl, title, description, rating, genre } = filmsList[id];
+  const activeFilm: filmType = useSelector(
+    (state: any) => state.films.activeFilm
+  );
+  // const id = Number(window.location.href.split("/").at(-1));
+  // const { imgUrl, title, description, rating, genre } = filmsList[id];
   const [activeTab, setActiveTab] = React.useState(FilmTabName.Overview);
 
   const handlePlay = () => {
-    navigate(`/player/${id}`);
+    navigate(`/player/${activeFilm.id}`);
   };
 
   const handleSeeList = () => {
@@ -125,7 +128,7 @@ const Film = () => {
       <section className="film-card film-card--full">
         <div className="film-card__hero">
           <div className="film-card__bg">
-            <img src={imgUrl} alt={title} />
+            <img src={activeFilm.backgroundImage} alt={activeFilm.name} />
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
@@ -158,7 +161,7 @@ const Film = () => {
 
           <div className="film-card__wrap">
             <div className="film-card__desc">
-              <h2 className="film-card__title">{title}</h2>
+              <h2 className="film-card__title">{activeFilm.name}</h2>
               <p className="film-card__meta">
                 <span className="film-card__genre">Drama</span>
                 <span className="film-card__year">2014</span>
@@ -184,7 +187,7 @@ const Film = () => {
                     <use xlinkHref="#add"></use>
                   </svg>
                   <span>My list</span>
-                  <span className="film-card__count">{myList.length}</span>
+                  <span className="film-card__count">{"777"}</span>
                 </button>
                 <span className="btn film-card__button" onClick={addReview}>
                   Add review
@@ -197,7 +200,12 @@ const Film = () => {
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
-              <img src={imgUrl} alt={title} width="218" height="327" />
+              <img
+                src={activeFilm.posterImage}
+                alt={activeFilm.name}
+                width="218"
+                height="327"
+              />
             </div>
 
             <div className="film-card__desc">
@@ -218,8 +226,8 @@ const Film = () => {
 
               <FilmTab
                 activeTab={activeTab}
-                description={description}
-                rating={rating}
+                description={activeFilm.description}
+                rating={activeFilm.rating}
               />
             </div>
           </div>
@@ -231,13 +239,7 @@ const Film = () => {
           <h2 className="catalog__title">More like this</h2>
 
           <div className="catalog__films-list">
-            {
-              <FilmsList
-                filmsList={filmsList
-                  .filter((film) => film.genre == genre)
-                  .slice(0, 4)}
-              />
-            }
+            {<FilmsList filmsList={[]} isLoading={false} />}
           </div>
         </section>
 

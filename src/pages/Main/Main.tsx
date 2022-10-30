@@ -12,11 +12,15 @@ type typeProps = {
 type typeFilms = {
   genre: FilmGenres;
   filteredFilms: [];
+  isLoading: boolean;
 };
 
 const Main = function ({ lengthMyList }: typeProps) {
-  const { genre: activeGenre, filteredFilms: filmsList }: typeFilms =
-    useSelector((state: any) => state.films);
+  const {
+    genre: activeGenre,
+    filteredFilms: filmsList,
+    isLoading,
+  }: typeFilms = useSelector((state: any) => state.films);
   const [countFilmsShown, setCountFilmShown] = React.useState(8);
 
   const navigate = useNavigate();
@@ -219,7 +223,10 @@ const Main = function ({ lengthMyList }: typeProps) {
           </ul>
 
           <div className="catalog__films-list">
-            <FilmsList filmsList={filmsList.slice(0, countFilmsShown)} />
+            <FilmsList
+              filmsList={filmsList.slice(0, countFilmsShown)}
+              isLoading={isLoading}
+            />
           </div>
 
           <div className="catalog__more">

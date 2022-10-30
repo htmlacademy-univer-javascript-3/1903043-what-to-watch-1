@@ -4,9 +4,10 @@ import { filmType } from "../../types/filmType";
 
 type typeProps = {
   myList: filmType[];
+  isLoading: boolean;
 };
 
-const MyList = ({ myList }: typeProps) => {
+const MyList = ({ myList, isLoading }: typeProps) => {
   return (
     <>
       <div className="visually-hidden">
@@ -131,7 +132,7 @@ const MyList = ({ myList }: typeProps) => {
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
           <div className="catalog__films-list">
-            <FilmsList filmsList={myList} />
+            <FilmsList filmsList={myList} isLoading={isLoading} />
           </div>
         </section>
 

@@ -10,7 +10,7 @@ type typeProps = {
 };
 
 function Card({ film, handleMouseOverFilm, isPlaying }: typeProps) {
-  const { id, imgUrl, title, videoUrl } = film;
+  const { id, previewImage, name, videoLink } = film;
 
   let timeout: any;
 
@@ -30,14 +30,14 @@ function Card({ film, handleMouseOverFilm, isPlaying }: typeProps) {
       onMouseOut={clearTimeOutOver}
     >
       {isPlaying ? (
-        <VideoPlayer src={videoUrl} muted autoPlay />
+        <VideoPlayer src={videoLink} muted autoPlay />
       ) : (
         <Link to={`/films/${id}`} className="film-link">
           <div className="small-film-card__image">
-            <img src={imgUrl} alt={title} width="280" height="175" />
+            <img src={previewImage} alt={name} width="280" height="175" />
           </div>
           <h3 className="small-film-card__title">
-            <span className="small-film-card__link">{title}</span>
+            <span className="small-film-card__link">{name}</span>
           </h3>
         </Link>
       )}
