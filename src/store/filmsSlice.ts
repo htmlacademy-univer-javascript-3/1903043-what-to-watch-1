@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { FilmGenres } from "../const";
+import { AuthorizationStatus, FilmGenres } from "../const";
+import { removeToken } from "../services/token";
 import { filmType } from "../types/filmType";
 import { fetchFilms } from "./api-actions";
 
@@ -12,6 +13,7 @@ const filmsSlice = createSlice({
     myList: [],
     genre: FilmGenres.All,
     activeFilm: null,
+    authorizationStatus: AuthorizationStatus.Unknown,
   },
   reducers: {
     setFilms(state, action) {
@@ -34,6 +36,13 @@ const filmsSlice = createSlice({
         );
       }
     },
+    requireAuthorize(state, action) {
+      state.authorizationStatus = action.payload;
+    },
+    signOut(state) {
+      state.authorizationStatus = AuthorizationStatus.NoAuth;
+      removeToken();
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchFilms.pending, (state: any, action: any) => {
@@ -47,6 +56,7 @@ const filmsSlice = createSlice({
   },
 });
 
-export const { setGenre, setFilms } = filmsSlice.actions;
+export const { setGenre, setFilms, requireAuthorize, signOut } =
+  filmsSlice.actions;
 
 export default filmsSlice.reducer;

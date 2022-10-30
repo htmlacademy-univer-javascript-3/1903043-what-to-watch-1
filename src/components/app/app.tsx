@@ -7,11 +7,11 @@ import MyList from "./../../pages/MyList/MyList";
 import Film from "./../../pages/Film/Film";
 import AddReview from "./../../pages/AddReview/AddReview";
 import Player from "./../../pages/Player/Player";
-import { AppRoute } from "../../const";
+import { AppRoute, AuthorizationStatus } from "../../const";
 import PrivateRoute from "./../../private-route/PrivateRoute";
 import { useSelector } from "react-redux";
 import { filmType } from "../../types/filmType";
-import { fetchFilms } from "./../../store/api-actions";
+import { checkAuthStatus, fetchFilms } from "./../../store/api-actions";
 import store from "../../store";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../types/store";
@@ -20,8 +20,8 @@ function App(): JSX.Element {
   type typeState = {
     baseFilms: filmType[];
     isLoading: boolean;
+    authorizationStatus: AuthorizationStatus;
   };
-  const [isAuth, setIsAuth] = React.useState(true);
   const { baseFilms: filmsList, isLoading }: typeState = useSelector(
     (state: any) => state.films
   );
@@ -29,6 +29,7 @@ function App(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
+    dispatch(checkAuthStatus());
     dispatch(fetchFilms());
   }, []);
 
@@ -40,7 +41,7 @@ function App(): JSX.Element {
         <Route
           path={AppRoute.MyList}
           element={
-            <PrivateRoute isAuth={isAuth}>
+            <PrivateRoute>
               <MyList myList={filmsList} isLoading={isLoading} />
             </PrivateRoute>
           }
