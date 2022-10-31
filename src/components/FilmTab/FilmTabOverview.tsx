@@ -3,16 +3,27 @@ import React from "react";
 type propsType = {
   description: string;
   rating: number;
+  scoresCount: number;
+  director: string;
+  starring: string[];
 };
 
-const FilmTabOverview = ({ rating, description }: propsType) => {
+const FilmTabOverview = ({
+  rating,
+  description,
+  scoresCount,
+  director,
+  starring,
+}: propsType) => {
   return (
     <>
       <div className="film-rating">
         <div className="film-rating__score">{rating}</div>
         <p className="film-rating__meta">
-          <span className="film-rating__level">Very good</span>
-          <span className="film-rating__count">240 ratings</span>
+          <span className="film-rating__level">
+            {rating > 5 ? "Good" : "Bad"}
+          </span>
+          <span className="film-rating__count">{scoresCount} ratings</span>
         </p>
       </div>
 
@@ -20,14 +31,11 @@ const FilmTabOverview = ({ rating, description }: propsType) => {
         {description}
 
         <p className="film-card__director">
-          <strong>Director: Wes Anderson</strong>
+          <strong>Director: {director}</strong>
         </p>
 
         <p className="film-card__starring">
-          <strong>
-            Starring: Bill Murray, Edward Norton, Jude Law, Willem Dafoe and
-            other
-          </strong>
+          <strong>Starring: {starring.join(", ")} and other</strong>
         </p>
       </div>
     </>

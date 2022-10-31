@@ -24,7 +24,7 @@ const SignIn = () => {
   };
 
   if (authorizationStatus == AuthorizationStatus.Auth) {
-    navigate(AppRoute.Main);
+    navigate(-1);
     return <></>;
   }
 

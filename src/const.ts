@@ -28,8 +28,9 @@ export enum FilmGenres {
 
 export enum APIRoute {
   Films = "/films",
-  ParticularFilm = "/film",
-  Login = "/login",
+  Similar = "/similar",
+  Comments = "/comments",
+  NotFound = "/page-404",
 }
 
 export enum AuthorizationStatus {

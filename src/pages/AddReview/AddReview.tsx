@@ -2,11 +2,40 @@ import React from "react";
 import { filmType } from "../../types/filmType";
 import FormReview from "./FormReview/FormReview";
 import { useSelector } from "react-redux";
+import { APIRoute, AppRoute, AuthorizationStatus } from "../../const";
+import { createAPI } from "./../../services/api";
+import { Link } from "react-router-dom";
+import AuthInfoBlock from "../../components/AuthInfoBlock/AuthInfoBlock";
 
 const AddReview = () => {
-  const activeFilm: filmType = useSelector(
-    (state: any) => state.films.activeFilm
+  const id = Number(window.location.href.split("/").at(-2));
+  const [film, setFilm] = React.useState<filmType>();
+  const [countStars, setCountStars] = React.useState<null | number>(null);
+  const possibleStars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const authorizationStatus: AuthorizationStatus = useSelector(
+    (state: any) => state.films.authorizationStatus
   );
+  const api = createAPI();
+
+  React.useEffect(() => {
+    const fetchFilm = async () => {
+      try {
+        const { data: filmData } = await api.get<filmType>(
+          `${APIRoute.Films}/${id}`
+        );
+        setFilm(filmData);
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+    fetchFilm();
+  }, [id]);
+
+  const handleChangeRating = (countStars: number) => {
+    setCountStars(countStars);
+    console.log(countStars);
+  };
+
   return (
     <>
       <div className="visually-hidden">
@@ -99,54 +128,45 @@ const AddReview = () => {
       <section className="film-card film-card--full">
         <div className="film-card__header">
           <div className="film-card__bg">
-            <img src={activeFilm.backgroundImage} alt={activeFilm.name} />
+            <img src={film?.backgroundImage} alt={film?.name} />
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
 
           <header className="page-header">
             <div className="logo">
-              <a href="main.html" className="logo__link">
+              <Link to={AppRoute.Main} className="logo__link">
                 <span className="logo__letter logo__letter--1">W</span>
                 <span className="logo__letter logo__letter--2">T</span>
                 <span className="logo__letter logo__letter--3">W</span>
-              </a>
+              </Link>
             </div>
 
             <nav className="breadcrumbs">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <a href="film-page.html" className="breadcrumbs__link">
-                    The Grand Budapest Hotel
-                  </a>
+                  <Link
+                    to={`${APIRoute.Films}/${id}`}
+                    className="breadcrumbs__link"
+                  >
+                    {film?.name}
+                  </Link>
                 </li>
                 <li className="breadcrumbs__item">
-                  <a className="breadcrumbs__link">Add review</a>
+                  <span className="breadcrumbs__link">Add review</span>
                 </li>
               </ul>
             </nav>
 
             <ul className="user-block">
-              <li className="user-block__item">
-                <div className="user-block__avatar">
-                  <img
-                    src="img/avatar.jpg"
-                    alt="User avatar"
-                    width="63"
-                    height="63"
-                  />
-                </div>
-              </li>
-              <li className="user-block__item">
-                <a className="user-block__link">Sign out</a>
-              </li>
+              <AuthInfoBlock />
             </ul>
           </header>
 
           <div className="film-card__poster film-card__poster--small">
             <img
-              src={activeFilm.posterImage}
-              alt={activeFilm.name}
+              src={film?.posterImage}
+              alt={film?.name}
               width="218"
               height="327"
             />
@@ -157,119 +177,27 @@ const AddReview = () => {
           <form action="#" className="add-review__form">
             <div className="rating">
               <div className="rating__stars">
-                <input
-                  className="rating__input"
-                  id="star-10"
-                  type="radio"
-                  name="rating"
-                  value="10"
-                />
-                <label className="rating__label" htmlFor="star-10">
-                  Rating 10
-                </label>
-
-                <input
-                  className="rating__input"
-                  id="star-9"
-                  type="radio"
-                  name="rating"
-                  value="9"
-                />
-                <label className="rating__label" htmlFor="star-9">
-                  Rating 9
-                </label>
-
-                <input
-                  className="rating__input"
-                  id="star-8"
-                  type="radio"
-                  name="rating"
-                  value="8"
-                  checked
-                />
-                <label className="rating__label" htmlFor="star-8">
-                  Rating 8
-                </label>
-
-                <input
-                  className="rating__input"
-                  id="star-7"
-                  type="radio"
-                  name="rating"
-                  value="7"
-                />
-                <label className="rating__label" htmlFor="star-7">
-                  Rating 7
-                </label>
-
-                <input
-                  className="rating__input"
-                  id="star-6"
-                  type="radio"
-                  name="rating"
-                  value="6"
-                />
-                <label className="rating__label" htmlFor="star-6">
-                  Rating 6
-                </label>
-
-                <input
-                  className="rating__input"
-                  id="star-5"
-                  type="radio"
-                  name="rating"
-                  value="5"
-                />
-                <label className="rating__label" htmlFor="star-5">
-                  Rating 5
-                </label>
-
-                <input
-                  className="rating__input"
-                  id="star-4"
-                  type="radio"
-                  name="rating"
-                  value="4"
-                />
-                <label className="rating__label" htmlFor="star-4">
-                  Rating 4
-                </label>
-
-                <input
-                  className="rating__input"
-                  id="star-3"
-                  type="radio"
-                  name="rating"
-                  value="3"
-                />
-                <label className="rating__label" htmlFor="star-3">
-                  Rating 3
-                </label>
-
-                <input
-                  className="rating__input"
-                  id="star-2"
-                  type="radio"
-                  name="rating"
-                  value="2"
-                />
-                <label className="rating__label" htmlFor="star-2">
-                  Rating 2
-                </label>
-
-                <input
-                  className="rating__input"
-                  id="star-1"
-                  type="radio"
-                  name="rating"
-                  value="1"
-                />
-                <label className="rating__label" htmlFor="star-1">
-                  Rating 1
-                </label>
+                {possibleStars.reverse().map((star) => (
+                  <>
+                    <input
+                      className="rating__input"
+                      id={`star-${star}`}
+                      type="radio"
+                      name="rating"
+                      value={star}
+                    />
+                    <label
+                      className="rating__label"
+                      htmlFor={`star-${star}`}
+                      onClick={() => handleChangeRating(star)}
+                    >
+                      Rating {star}
+                    </label>
+                  </>
+                ))}
               </div>
             </div>
-            <FormReview />
+            {film && <FormReview rating={countStars} id={film?.id} />}
           </form>
         </div>
       </section>
