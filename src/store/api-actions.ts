@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosInstance } from "axios";
-import { APIRoute, AuthorizationStatus } from "../const";
+import { APIRoute, AppRoute, AuthorizationStatus } from "../const";
 import { Token } from "../services/token";
 import { filmType } from "../types/filmType";
 import { requireAuthorize } from "./filmsSlice";
@@ -31,7 +31,7 @@ export const checkAuthStatus = createAsyncThunk<
   }
 >("films/checkAuthStatus", async function (_arg, { dispatch, extra: api }) {
   try {
-    await api.get<Token>(APIRoute.Login);
+    await api.get<Token>(AppRoute.Login);
     dispatch(requireAuthorize(AuthorizationStatus.Auth));
   } catch (error) {
     dispatch(requireAuthorize(AuthorizationStatus.NoAuth));
@@ -50,7 +50,7 @@ export const loginAction = createAsyncThunk<
     try {
       const {
         data: { token },
-      } = await api.post(APIRoute.Login, { email, password });
+      } = await api.post(AppRoute.Login, { email, password });
       saveToken(token);
       dispatch(requireAuthorize(AuthorizationStatus.Auth));
     } catch (error) {

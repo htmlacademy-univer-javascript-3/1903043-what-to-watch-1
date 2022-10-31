@@ -1,17 +1,13 @@
 import React from "react";
 import FilmsList from "../../components/FilmsList";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  APIRoute,
-  AppRoute,
-  AuthorizationStatus,
-  FilmGenres,
-} from "../../const";
+import { AppRoute, FilmGenres } from "../../const";
 import { useSelector } from "react-redux";
 import ListGenres from "./../../components/ListGenres/ListGenres";
-import { signOut } from "../../store/filmsSlice";
 import { AppDispatch } from "../../types/store";
 import { useDispatch } from "react-redux";
+import { fetchFilms } from "../../store/api-actions";
+import AuthInfoBlock from "./../../components/AuthInfoBlock/AuthInfoBlock";
 
 type typeProps = {
   lengthMyList: number;
@@ -21,7 +17,6 @@ type typeFilms = {
   genre: FilmGenres;
   filteredFilms: [];
   isLoading: boolean;
-  authorizationStatus: AuthorizationStatus;
 };
 
 const Main = function ({ lengthMyList }: typeProps) {
@@ -29,12 +24,15 @@ const Main = function ({ lengthMyList }: typeProps) {
     genre: activeGenre,
     filteredFilms: filmsList,
     isLoading,
-    authorizationStatus,
   }: typeFilms = useSelector((state: any) => state.films);
   const [countFilmsShown, setCountFilmShown] = React.useState(8);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+
+  React.useEffect(() => {
+    dispatch(fetchFilms());
+  }, []);
 
   const handlePlay = () => {
     navigate("/player/1");
@@ -46,10 +44,6 @@ const Main = function ({ lengthMyList }: typeProps) {
 
   const handleShowMore = () => {
     setCountFilmShown(countFilmsShown + 8);
-  };
-
-  const handleSignOut = () => {
-    dispatch(signOut());
   };
 
   return (
@@ -168,29 +162,7 @@ const Main = function ({ lengthMyList }: typeProps) {
           </div>
 
           <ul className="user-block">
-            <li className="user-block__item">
-              <Link to={AppRoute.MyList}>
-                <div className="user-block__avatar">
-                  <img
-                    src="img/avatar.jpg"
-                    alt="User avatar"
-                    width="63"
-                    height="63"
-                  />
-                </div>
-              </Link>
-            </li>
-            <li className="user-block__item">
-              {authorizationStatus == AuthorizationStatus.Auth ? (
-                <span className="user-block__link" onClick={handleSignOut}>
-                  Sign out
-                </span>
-              ) : (
-                <Link to={AppRoute.Login} className="user-block__link">
-                  Sign in
-                </Link>
-              )}
-            </li>
+            <AuthInfoBlock />
           </ul>
         </header>
 

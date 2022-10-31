@@ -1,23 +1,58 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FilmTab from "./../../components/FilmTab/";
-import { AppRoute, FilmTabName } from "../../const";
+import {
+  APIRoute,
+  AppRoute,
+  AuthorizationStatus,
+  FilmTabName,
+} from "../../const";
 import Card from "../../components/Card";
 import FilmsList from "../../components/FilmsList";
-import { useSelector } from "react-redux";
 import { filmType } from "../../types/filmType";
+import { createAPI } from "./../../services/api";
+import axios from "axios";
+import { AuthInfoBlock } from "./../../components/AuthInfoBlock/AuthInfoBlock";
+import { comment } from "../../types/comment";
+import { useSelector } from "react-redux";
 
 const Film = () => {
   const navigate = useNavigate();
-  const activeFilm: filmType = useSelector(
-    (state: any) => state.films.activeFilm
-  );
-  // const id = Number(window.location.href.split("/").at(-1));
-  // const { imgUrl, title, description, rating, genre } = filmsList[id];
+  const id = Number(window.location.href.split("/").at(-1));
+  const api = createAPI();
+  const [film, setFilm] = React.useState<filmType>();
+  const [similarFilms, setSimilarFilms] = React.useState<filmType[]>();
   const [activeTab, setActiveTab] = React.useState(FilmTabName.Overview);
+  const authorizationStatus: AuthorizationStatus = useSelector(
+    (state: any) => state.films.authorizationStatus
+  );
+
+  React.useEffect(() => {
+    const fetchFilm = async () => {
+      try {
+        const { data: filmData } = await api.get<filmType>(
+          `${APIRoute.Films}/${id}`
+        );
+        setFilm(filmData);
+
+        const { data: similarFilmsData } = await api.get<filmType[]>(
+          `${APIRoute.Films}/${id}${APIRoute.Similar}`
+        );
+        setSimilarFilms(
+          similarFilmsData
+            .filter((similarFilm) => similarFilm.id != filmData.id)
+            .slice(0, 4)
+        );
+      } catch (error: any) {
+        navigate(APIRoute.NotFound);
+        console.log(error);
+      }
+    };
+    fetchFilm();
+  }, [id]);
 
   const handlePlay = () => {
-    navigate(`/player/${activeFilm.id}`);
+    navigate(`/player/${film?.id}`);
   };
 
   const handleSeeList = () => {
@@ -128,7 +163,7 @@ const Film = () => {
       <section className="film-card film-card--full">
         <div className="film-card__hero">
           <div className="film-card__bg">
-            <img src={activeFilm.backgroundImage} alt={activeFilm.name} />
+            <img src={film?.backgroundImage} alt={film?.name} />
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
@@ -143,28 +178,16 @@ const Film = () => {
             </div>
 
             <ul className="user-block">
-              <li className="user-block__item">
-                <div className="user-block__avatar">
-                  <img
-                    src="img/avatar.jpg"
-                    alt="User avatar"
-                    width="63"
-                    height="63"
-                  />
-                </div>
-              </li>
-              <li className="user-block__item">
-                <a className="user-block__link">Sign out</a>
-              </li>
+              <AuthInfoBlock />
             </ul>
           </header>
 
           <div className="film-card__wrap">
             <div className="film-card__desc">
-              <h2 className="film-card__title">{activeFilm.name}</h2>
+              <h2 className="film-card__title">{film?.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">Drama</span>
-                <span className="film-card__year">2014</span>
+                <span className="film-card__genre">{film?.genre}</span>
+                <span className="film-card__year">{film?.released}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -189,9 +212,11 @@ const Film = () => {
                   <span>My list</span>
                   <span className="film-card__count">{"777"}</span>
                 </button>
-                <span className="btn film-card__button" onClick={addReview}>
-                  Add review
-                </span>
+                {authorizationStatus == AuthorizationStatus.Auth && (
+                  <span className="btn film-card__button" onClick={addReview}>
+                    Add review
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -201,8 +226,8 @@ const Film = () => {
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
               <img
-                src={activeFilm.posterImage}
-                alt={activeFilm.name}
+                src={film?.posterImage}
+                alt={film?.name}
                 width="218"
                 height="327"
               />
@@ -224,11 +249,7 @@ const Film = () => {
                 </ul>
               </nav>
 
-              <FilmTab
-                activeTab={activeTab}
-                description={activeFilm.description}
-                rating={activeFilm.rating}
-              />
+              {film && <FilmTab activeTab={activeTab} film={film} />}
             </div>
           </div>
         </div>
@@ -239,7 +260,9 @@ const Film = () => {
           <h2 className="catalog__title">More like this</h2>
 
           <div className="catalog__films-list">
-            {<FilmsList filmsList={[]} isLoading={false} />}
+            {similarFilms && (
+              <FilmsList filmsList={similarFilms} isLoading={false} />
+            )}
           </div>
         </section>
 

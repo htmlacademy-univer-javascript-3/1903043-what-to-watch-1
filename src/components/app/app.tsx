@@ -29,8 +29,10 @@ function App(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
-    dispatch(checkAuthStatus());
-    dispatch(fetchFilms());
+    const checkStatus = async () => {
+      await dispatch(checkAuthStatus());
+    };
+    checkStatus();
   }, []);
 
   return (
@@ -48,7 +50,14 @@ function App(): JSX.Element {
         />
         <Route path={AppRoute.Film}>
           <Route index element={<Film />} />
-          <Route path={AppRoute.AddReview} element={<AddReview />} />
+          <Route
+            path={AppRoute.AddReview}
+            element={
+              <PrivateRoute>
+                <AddReview />
+              </PrivateRoute>
+            }
+          />
         </Route>
         <Route
           path={AppRoute.PlayerId}
