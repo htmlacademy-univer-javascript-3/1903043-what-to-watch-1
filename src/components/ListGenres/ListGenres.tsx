@@ -1,13 +1,11 @@
 import React from "react";
 import { FilmGenres } from "../../const";
-import { setGenre } from "../../store/filmsSlice";
-import { useDispatch } from "react-redux";
+import { setGenre } from "../../store/slices";
+import { useDispatch, useSelector } from "react-redux";
+import { getGenre } from "./../../store/selectors";
 
-type propsType = {
-  activeGenre: FilmGenres;
-};
-
-const ListGenres = ({ activeGenre }: propsType) => {
+const ListGenres = () => {
+  const activeGenre = useSelector((state) => getGenre(state));
   const dispatch = useDispatch();
 
   const onClickGenre = (genre: FilmGenres) => {

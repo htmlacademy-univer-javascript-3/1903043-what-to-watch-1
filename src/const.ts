@@ -16,19 +16,19 @@ export enum FilmTabName {
 
 export enum FilmGenres {
   All = "All Genres",
-  Comedies = "Comedies",
+  Comedy = "Comedy",
   Crime = "Crime",
-  Documentary = "Documentary",
-  Dramas = "Dramas",
-  KidsFamily = "Kids & Family",
-  Romance = "Romance",
-  SciFi = "Sci-Fi",
-  Thrillers = "Thrillers",
+  Adventure = "Adventure",
+  Fantasy = "Fantasy",
+  Drama = "Drama",
+  Action = "Action",
+  Thriller = "Thriller",
 }
 
 export enum APIRoute {
   Films = "/films",
   Similar = "/similar",
+  Favorite = "/favorite",
   Comments = "/comments",
   NotFound = "/page-404",
 }
@@ -37,4 +37,23 @@ export enum AuthorizationStatus {
   Unknown = "Unknown",
   NoAuth = "NoAuth",
   Auth = "Auth",
+}
+
+export enum LoadingStatus {
+  True = "true",
+  False = "false",
+  Error = "error",
+}
+
+export enum WhereFilmsList {
+  OnMainPage = "ON_MAIN_PAGE",
+  SimilarFilms = "SIMILAR_FILMS",
+}
+
+export enum NameAssesment {
+  Bad = "Bad",
+  Normal = "Normal",
+  Good = "Good",
+  VeryGood = "Very good",
+  Awesome = "Awesome",
 }
