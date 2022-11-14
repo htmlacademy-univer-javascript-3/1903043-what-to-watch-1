@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import FilmsList from "../../components/FilmsList";
 import { AppRoute } from "../../const";
 import { filmType } from "../../types/filmType";
+import { useSelector } from "react-redux";
+import { getIsLoadingStatus } from "../../store/selectors";
 
 type typeProps = {
   myList: filmType[];
-  isLoading: boolean;
 };
 
-const MyList = ({ myList, isLoading }: typeProps) => {
+const MyList = ({ myList }: typeProps) => {
+  const isLoading = useSelector((state) => getIsLoadingStatus(state));
   return (
     <>
       <div className="visually-hidden">
@@ -134,7 +136,7 @@ const MyList = ({ myList, isLoading }: typeProps) => {
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
           <div className="catalog__films-list">
-            <FilmsList filmsList={myList} isLoading={isLoading} />
+            {/* <FilmsList filmsList={myList }||} isLoading={isLoading} /> */}
           </div>
         </section>
 

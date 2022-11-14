@@ -5,13 +5,14 @@ import { loginAction } from "./../../store/api-actions";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../types/store";
 import { useSelector } from "react-redux";
+import { getAuthorizationStatus } from "./../../store/selectors";
 
 const SignIn = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const dispatch = useDispatch<AppDispatch>();
-  const authorizationStatus = useSelector(
-    (state: any) => state.films.authorizationStatus
+  const authorizationStatus = useSelector((state) =>
+    getAuthorizationStatus(state)
   );
   const navigate = useNavigate();
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { NameAssesment } from "../../const";
 
 type propsType = {
   description: string;
@@ -15,14 +16,28 @@ const FilmTabOverview = ({
   director,
   starring,
 }: propsType) => {
+  const getNameAssesment = () => {
+    let nameAssesment = "";
+    if (0 <= rating && rating < 3) {
+      nameAssesment = NameAssesment.Bad;
+    } else if (3 <= rating && rating < 5) {
+      nameAssesment = NameAssesment.Normal;
+    } else if (5 <= rating && rating < 8) {
+      nameAssesment = NameAssesment.Good;
+    } else if (8 <= rating && rating < 10) {
+      nameAssesment = NameAssesment.VeryGood;
+    } else if (rating == 10) {
+      nameAssesment = NameAssesment.Awesome;
+    }
+    return nameAssesment;
+  };
+
   return (
     <>
       <div className="film-rating">
         <div className="film-rating__score">{rating}</div>
         <p className="film-rating__meta">
-          <span className="film-rating__level">
-            {rating > 5 ? "Good" : "Bad"}
-          </span>
+          <span className="film-rating__level">{getNameAssesment()}</span>
           <span className="film-rating__count">{scoresCount} ratings</span>
         </p>
       </div>

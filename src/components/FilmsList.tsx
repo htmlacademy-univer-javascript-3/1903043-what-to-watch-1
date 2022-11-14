@@ -2,13 +2,31 @@ import React from "react";
 import Card from "./Card";
 import { filmType } from "../types/filmType";
 import LoadingSpinner from "./LoadingSpinner";
+import {
+  getCountFilmsShown,
+  getFilmsByGenre,
+  getIsLoadingStatus,
+  getSimilarFilms,
+} from "../store/selectors";
+import { useSelector } from "react-redux";
+import { LoadingStatus, WhereFilmsList } from "../const";
 
-type typeProps = {
-  filmsList: filmType[];
-  isLoading: boolean;
+type propsType = {
+  whereFilmsList: WhereFilmsList;
 };
 
-const FilmsList = ({ filmsList, isLoading }: typeProps) => {
+const FilmsList = ({ whereFilmsList }: propsType) => {
+  const countFilmsShown = useSelector((state) => getCountFilmsShown(state));
+  const filmsList: filmType[] = useSelector((state) => {
+    if (whereFilmsList == WhereFilmsList.OnMainPage) {
+      return getFilmsByGenre(state);
+    }
+    if (whereFilmsList == WhereFilmsList.SimilarFilms) {
+      return getSimilarFilms(state);
+    }
+    return [];
+  });
+  const isLoading = useSelector((state) => getIsLoadingStatus(state));
   const [activeFilm, setActiveFilm] = React.useState<number | null>(null);
 
   React.useEffect(() => {
@@ -30,17 +48,19 @@ const FilmsList = ({ filmsList, isLoading }: typeProps) => {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading === LoadingStatus.True ? (
         <LoadingSpinner />
       ) : (
-        filmsList.map((film) => (
-          <Card
-            film={film}
-            key={film.id}
-            handleMouseOverFilm={handleMouseOverFilm}
-            isPlaying={film.id === activeFilm}
-          />
-        ))
+        filmsList
+          .slice(0, countFilmsShown)
+          .map((film) => (
+            <Card
+              film={film}
+              key={film.id}
+              handleMouseOverFilm={handleMouseOverFilm}
+              isPlaying={film.id === activeFilm}
+            />
+          ))
       )}
     </>
   );

@@ -9,42 +9,28 @@ import AddReview from "./../../pages/AddReview/AddReview";
 import Player from "./../../pages/Player/Player";
 import { AppRoute, AuthorizationStatus } from "../../const";
 import PrivateRoute from "./../../private-route/PrivateRoute";
-import { useSelector } from "react-redux";
-import { filmType } from "../../types/filmType";
-import { checkAuthStatus, fetchFilms } from "./../../store/api-actions";
-import store from "../../store";
+import { checkAuthStatus, fetchMyList } from "./../../store/api-actions";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../types/store";
 
 function App(): JSX.Element {
-  type typeState = {
-    baseFilms: filmType[];
-    isLoading: boolean;
-    authorizationStatus: AuthorizationStatus;
-  };
-  const { baseFilms: filmsList, isLoading }: typeState = useSelector(
-    (state: any) => state.films
-  );
-
   const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
-    const checkStatus = async () => {
-      await dispatch(checkAuthStatus());
-    };
-    checkStatus();
+    dispatch(checkAuthStatus());
+    dispatch(fetchMyList());
   }, []);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Main lengthMyList={filmsList.length} />} />
+        <Route path="/" element={<Main />} />
         <Route path={AppRoute.Login} element={<SignIn />} />
         <Route
           path={AppRoute.MyList}
           element={
             <PrivateRoute>
-              <MyList myList={filmsList} isLoading={isLoading} />
+              <MyList myList={[]} />
             </PrivateRoute>
           }
         />
@@ -61,7 +47,7 @@ function App(): JSX.Element {
         </Route>
         <Route
           path={AppRoute.PlayerId}
-          element={<Player videoUrl={filmsList[0]?.videoLink} />}
+          element={<Player videoUrl={"testurl"} />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>

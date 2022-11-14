@@ -2,13 +2,14 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AppRoute, AuthorizationStatus } from "../../const";
-import { signOut } from "../../store/filmsSlice";
+import { signOut } from "../../store/slices";
 import { AppDispatch } from "../../types/store";
 import { Link } from "react-router-dom";
+import { getAuthorizationStatus } from "./../../store/selectors";
 
 export const AuthInfoBlock = () => {
-  const authorizationStatus: AuthorizationStatus = useSelector(
-    (state: any) => state.films.authorizationStatus
+  const authorizationStatus = useSelector((state) =>
+    getAuthorizationStatus(state)
   );
   const dispatch = useDispatch<AppDispatch>();
 
