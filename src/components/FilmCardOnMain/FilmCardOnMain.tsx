@@ -1,29 +1,31 @@
 import React from "react";
 import AuthInfoBlock from "../AuthInfoBlock/AuthInfoBlock";
-import { AppRoute } from "../../const";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getMyList } from "./../../store/selectors";
+import {
+  getAuthorizationStatus,
+  getFilmsByGenre,
+  getMyList,
+} from "./../../store/selectors";
+import FavoriteButton from "../FavoriteButton/FavoriteButton";
 
 const FilmCardOnMain = () => {
-  const myListLength = useSelector((state) => getMyList(state)).length;
+  const film = useSelector((state) => getFilmsByGenre(state))
+    ? useSelector((state) => getFilmsByGenre(state))[0]
+    : null;
+  const authorizationStatus = useSelector((state) =>
+    getAuthorizationStatus(state)
+  );
   const navigate = useNavigate();
 
   const handlePlay = () => {
-    navigate("/player/1");
-  };
-
-  const handleSeeList = () => {
-    navigate(AppRoute.MyList);
+    navigate(`/player/${film?.id}`);
   };
 
   return (
     <section className="film-card">
       <div className="film-card__bg">
-        <img
-          src="img/bg-the-grand-budapest-hotel.jpg"
-          alt="The Grand Budapest Hotel"
-        />
+        <img src={film?.backgroundImage} alt={film?.name} />
       </div>
 
       <h1 className="visually-hidden">WTW</h1>
@@ -46,18 +48,18 @@ const FilmCardOnMain = () => {
         <div className="film-card__info">
           <div className="film-card__poster">
             <img
-              src="img/the-grand-budapest-hotel-poster.jpg"
-              alt="The Grand Budapest Hotel poster"
+              src={film?.posterImage}
+              alt={film?.name}
               width="218"
               height="327"
             />
           </div>
 
           <div className="film-card__desc">
-            <h2 className="film-card__title">The Grand Budapest Hotel</h2>
+            <h2 className="film-card__title">{film?.name}</h2>
             <p className="film-card__meta">
-              <span className="film-card__genre">Drama</span>
-              <span className="film-card__year">2014</span>
+              <span className="film-card__genre">{film?.genre}</span>
+              <span className="film-card__year">{film?.released}</span>
             </p>
 
             <div className="film-card__buttons">
@@ -71,13 +73,14 @@ const FilmCardOnMain = () => {
                 </svg>
                 <span>Play</span>
               </button>
-              <button className="btn btn--list film-card__button" type="button">
-                <svg viewBox="0 0 19 20" width="19" height="20">
-                  <use xlinkHref="#add"></use>
-                </svg>
-                <span onClick={handleSeeList}>My list</span>
-                <span className="film-card__count">{myListLength}</span>
-              </button>
+
+              {film && (
+                <FavoriteButton
+                  id={film.id}
+                  film={film}
+                  authorizationStatus={authorizationStatus}
+                />
+              )}
             </div>
           </div>
         </div>

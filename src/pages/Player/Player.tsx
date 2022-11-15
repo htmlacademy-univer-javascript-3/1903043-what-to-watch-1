@@ -1,135 +1,159 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchSelectedFilm } from "../../store/api-actions";
+import { AppDispatch } from "../../types/store";
+import { getIsLoadingStatus, getSelectedFilm } from "./../../store/selectors";
+import { useNavigate } from "react-router-dom";
 
-type typeProps = {
-  videoUrl: string;
-};
+const Player = () => {
+  const id = Number(window.location.href.split("/").at(-1));
+  const film = useSelector((state) => getSelectedFilm(state));
+  const videoRef: any = React.useRef();
+  const timeValueRef: any = React.useRef();
+  const buttonPlayRef: any = React.useRef();
+  const progressBarRef: any = React.useRef();
+  const [isPlaying, setIsPlaying] = React.useState(false);
 
-const Player = ({ videoUrl }: typeProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    dispatch(fetchSelectedFilm({ id }));
+  }, [id]);
+
+  const handlePlay = () => {
+    if (videoRef.current.paused == true) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const handleFullScreen = () => {
+    if (videoRef.current.requestFullscreen) {
+      videoRef.current.requestFullscreen();
+    } else if (videoRef.current.mozRequestFullScreen) {
+      videoRef.current.mozRequestFullScreen(); // Firefox
+    } else if (videoRef.current.webkitRequestFullscreen) {
+      videoRef.current.webkitRequestFullscreen(); // Chrome and Safari
+    }
+  };
+
+  const getRemainingTime = (): string => {
+    if (!videoRef.current) return "";
+    const allSeconds = Math.round(
+      videoRef.current.duration - videoRef.current.currentTime
+    );
+    const hours = Math.floor(allSeconds / 3600);
+    const minutes = Math.floor((allSeconds % 3600) / 60);
+    const seconds = allSeconds % 60;
+    const remainingTime = [hours, minutes, seconds]
+      .map((item, index) => {
+        if (index == 0 && item == 0) return;
+        else if (item >= 10) return item;
+        return `0${item}`;
+      })
+      .filter((item) => item)
+      .join(":");
+    return remainingTime;
+  };
+
+  const handleExit = () => {
+    navigate(-1);
+  };
+
+  const handleChangeProgressBar = (e: any) => {
+    var time = videoRef.current.duration * (progressBarRef.current.value / 100);
+    videoRef.current.currentTime = time;
+  };
+
+  const handleTimeUpDateVideo = () => {
+    timeValueRef.current.innerHTML = getRemainingTime();
+    var value =
+      (100 / videoRef.current.duration) * videoRef.current.currentTime;
+    progressBarRef.current.value = value;
+    progressBarRef.current.style.background = `-webkit-linear-gradient(
+      left,
+      #d9cd8d ${value}%,
+      #d9cd8d ${value}%,
+      rgba(255, 251, 231, 0.35) ${value}%,
+      rgba(255, 251, 231, 0.35) 100%
+    )`;
+  };
+
   return (
     <>
-      <div className="visually-hidden">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
-        >
-          <symbol id="add" viewBox="0 0 19 20">
-            <title>+</title>
-            <desc>Created with Sketch.</desc>
-            <g
-              id="Page-1"
-              stroke="none"
-              strokeWidth="1"
-              fill="none"
-              fillRule="evenodd"
-            >
-              <polygon
-                id="+"
-                fill="#EEE5B5"
-                points="10.777832 11.2880859 10.777832 19.5527344 8.41650391 19.5527344 8.41650391 11.2880859 0.627929688 11.2880859 0.627929688 8.92675781 8.41650391 8.92675781 8.41650391 0.662109375 10.777832 0.662109375 10.777832 8.92675781 18.5664062 8.92675781 18.5664062 11.2880859"
-              />
-            </g>
-          </symbol>
-          <symbol id="full-screen" viewBox="0 0 27 27">
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M23.8571 0H16V3.14286H23.8571V11H27V3.14286V0H23.8571Z"
-              fill="#FFF9D9"
-              fillOpacity="0.7"
-            />
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M27 23.8571V16H23.8571V23.8571H16V27H23.8571H27L27 23.8571Z"
-              fill="#FFF9D9"
-              fillOpacity="0.7"
-            />
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M0 3.14286L0 11H3.14286L3.14286 3.14286L11 3.14286V0H3.14286H0L0 3.14286Z"
-              fill="#FFF9D9"
-              fillOpacity="0.7"
-            />
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M3.14286 27H11V23.8571H3.14286L3.14286 16H0L0 23.8571V27H3.14286Z"
-              fill="#FFF9D9"
-              fillOpacity="0.7"
-            />
-          </symbol>
-          <symbol id="in-list" viewBox="0 0 18 14">
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M2.40513 5.35353L6.1818 8.90902L15.5807 0L18 2.80485L6.18935 14L0 8.17346L2.40513 5.35353Z"
-              fill="#EEE5B5"
-            />
-          </symbol>
-          <symbol id="pause" viewBox="0 0 14 21">
-            <title>Artboard</title>
-            <desc>Created with Sketch.</desc>
-            <g
-              id="Artboard"
-              stroke="none"
-              strokeWidth="1"
-              fill="none"
-              fillRule="evenodd"
-            >
-              <polygon
-                id="Line"
-                fill="#EEE5B5"
-                fillRule="nonzero"
-                points="0 -1.11910481e-13 4 -1.11910481e-13 4 21 0 21"
-              />
-              <polygon
-                id="Line"
-                fill="#EEE5B5"
-                fillRule="nonzero"
-                points="10 -1.11910481e-13 14 -1.11910481e-13 14 21 10 21"
-              />
-            </g>
-          </symbol>
-        </svg>
-      </div>
-
       <div className="player">
         <video
-          src={videoUrl}
+          src={film?.videoLink}
           className="player__video"
-          poster="img/player-poster.jpg"
+          poster={film?.posterImage}
+          ref={videoRef}
+          onTimeUpdate={handleTimeUpDateVideo}
         ></video>
 
-        <button type="button" className="player__exit">
+        <button type="button" className="player__exit" onClick={handleExit}>
           Exit
         </button>
 
         <div className="player__controls">
           <div className="player__controls-row">
             <div className="player__time">
-              <progress
+              <input
                 className="player__progress"
-                value="30"
+                value="0"
                 max="100"
-              ></progress>
-              <div className="player__toggler" style={{ left: "30%" }}>
-                Toggler
-              </div>
+                ref={progressBarRef}
+                onChange={handleChangeProgressBar}
+                type="range"
+              />
             </div>
-            <div className="player__time-value">1:30:29</div>
+            <div className="player__time-value" ref={timeValueRef}>
+              {getRemainingTime()}
+            </div>
           </div>
 
           <div className="player__controls-row">
-            <button type="button" className="player__play">
-              <svg viewBox="0 0 19 19" width="19" height="19">
-                <use xlinkHref="#play-s"></use>
-              </svg>
-              <span>Play</span>
+            <button
+              type="button"
+              className="player__play"
+              onClick={handlePlay}
+              ref={buttonPlayRef}
+            >
+              {isPlaying ? (
+                <>
+                  <svg
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    fill="#EEE5B5"
+                  >
+                    {" "}
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />{" "}
+                    <rect x="6" y="5" width="4" height="14" rx="1" />{" "}
+                    <rect x="14" y="5" width="4" height="14" rx="1" />{" "}
+                  </svg>
+                  <span>Play</span>
+                </>
+              ) : (
+                <>
+                  <svg viewBox="0 0 19 19" width="19" height="19">
+                    <use xlinkHref="#play-s"></use>
+                  </svg>
+                  <span>Pause</span>
+                </>
+              )}
             </button>
-            <div className="player__name">Transpotting</div>
+            <div className="player__name">{isPlaying ? "Pause" : "Play"}</div>
 
-            <button type="button" className="player__full-screen">
+            <button
+              type="button"
+              className="player__full-screen"
+              onClick={handleFullScreen}
+            >
               <svg viewBox="0 0 27 27" width="27" height="27">
                 <use xlinkHref="#full-screen"></use>
               </svg>

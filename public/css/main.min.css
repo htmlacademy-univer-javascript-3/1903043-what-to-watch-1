@@ -866,14 +866,33 @@ main {
 .player__progress {
   -webkit-appearance: none;
   width: 100%;
-  background: rgba(255, 251, 231, 0.35);
+  background: -webkit-linear-gradient(
+    left,
+    #d9cd8d 0,
+    #d9cd8d 0%,
+    rgba(255, 251, 231, 0.35) 0%,
+    rgba(255, 251, 231, 0.35) 100%
+  );
   border-radius: 1px;
   border: 0;
   height: 4px;
   display: block;
 }
-.player__progress::-moz-progress-bar {
+.player__progress::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border-radius: 50%;
   background: #d9cd8d;
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  transition: 0.1s;
+}
+.player__progress::-webkit-slider-thumb:hover {
+  -webkit-appearance: none;
+  border-radius: 50%;
+  background: #d9cd8d;
+  transform: scale(1.2);
+  cursor: pointer;
 }
 .player__progress::-webkit-progress-bar {
   background: rgba(255, 251, 231, 0.35);
@@ -934,7 +953,7 @@ main {
   font-size: 17px;
   line-height: 20px;
   font-weight: 700;
-  color: #b3ae98;
+  color: #d9cd8d;
   margin: 0 30px;
 }
 .player__full-screen {
