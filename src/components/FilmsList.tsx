@@ -8,8 +8,9 @@ import {
   getIsLoadingStatus,
   getSimilarFilms,
 } from "../store/selectors";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { LoadingStatus, WhereFilmsList } from "../const";
+import { AppDispatch } from "../types/store";
 
 type propsType = {
   whereFilmsList: WhereFilmsList;
@@ -27,6 +28,8 @@ const FilmsList = ({ whereFilmsList }: propsType) => {
     return [];
   });
   const isLoading = useSelector((state) => getIsLoadingStatus(state));
+
+  const selectedFilm = useDispatch<AppDispatch>();
   const [activeFilm, setActiveFilm] = React.useState<number | null>(null);
 
   React.useEffect(() => {

@@ -2,9 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AuthorizationStatus, FilmGenres, LoadingStatus } from "../const";
 import { removeToken } from "../services/token";
 import { filmType } from "../types/filmType";
-import { fetchFilms, fetchSelectedFilm } from "./api-actions";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../types/store";
 
 const statusesSlice = createSlice({
   name: "statuses",
@@ -41,6 +38,14 @@ const myListSlice = createSlice({
     setMyList(state, action) {
       state.myList = action.payload;
     },
+    addFilmToMyList(state: any, action) {
+      state.myList = [...state.myList, action.payload];
+    },
+    deleteFilmFromMyList(state: any, action) {
+      state.myList = state.myList.filter(
+        (film: filmType) => film.id !== action.payload.id
+      );
+    },
   },
 });
 
@@ -73,6 +78,14 @@ const filmsSlice = createSlice({
       state.baseFilms = action.payload;
       state.filteredFilms = action.payload;
     },
+    changeFilmValues(state: any, action) {
+      state.baseFilms = state.baseFilms.map((film: filmType) =>
+        film.id === action.payload.id ? action.payload : film
+      );
+      state.filteredFilms = state.filteredFilms.map((film: filmType) =>
+        film.id === action.payload.id ? action.payload : film
+      );
+    },
     setGenre(state, action) {
       state.genre = action.payload;
 
@@ -98,9 +111,11 @@ export const {
   setLoadingFalse,
   setLoadingError,
 } = statusesSlice.actions;
-export const { setMyList } = myListSlice.actions;
+export const { setMyList, addFilmToMyList, deleteFilmFromMyList } =
+  myListSlice.actions;
 export const { setFilm, setSimilarFilms } = selectedFilmSlice.actions;
-export const { setGenre, setFilms, showMoreFilms } = filmsSlice.actions;
+export const { setGenre, setFilms, changeFilmValues, showMoreFilms } =
+  filmsSlice.actions;
 
 export const statusesReducer = statusesSlice.reducer;
 export const myListReducer = myListSlice.reducer;

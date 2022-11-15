@@ -4,6 +4,9 @@ import { APIRoute, AppRoute, AuthorizationStatus } from "../const";
 import { Token } from "../services/token";
 import { filmType } from "../types/filmType";
 import {
+  addFilmToMyList,
+  changeFilmValues,
+  deleteFilmFromMyList,
   requireAuthorize,
   setFilm,
   setFilms,
@@ -91,7 +94,41 @@ export const fetchMyList = createAsyncThunk<
     dispatch(setMyList(data));
     dispatch(setLoadingFalse());
   } catch (error: any) {
-    dispatch(setLoadingError());
+    console.log(error.message);
+  }
+});
+
+export const addFilmToFavorite = createAsyncThunk<
+  void,
+  { id: number },
+  {
+    extra: AxiosInstance;
+  }
+>("films/fetchFilms", async function ({ id }, { dispatch, extra: api }) {
+  try {
+    const { data } = await api.post<filmType>(`${APIRoute.Favorite}/${id}/1`);
+    dispatch(setFilm(data));
+    dispatch(changeFilmValues(data));
+    dispatch(addFilmToMyList(data));
+  } catch (error: any) {
+    console.log(error.message);
+  }
+});
+
+export const deleteFilmFromFavorite = createAsyncThunk<
+  void,
+  { id: number },
+  {
+    extra: AxiosInstance;
+  }
+>("films/fetchFilms", async function ({ id }, { dispatch, extra: api }) {
+  try {
+    const { data } = await api.post<filmType>(`${APIRoute.Favorite}/${id}/0`);
+    dispatch(setFilm(data));
+    dispatch(changeFilmValues(data));
+    dispatch(deleteFilmFromMyList(data));
+  } catch (error: any) {
+    console.log(error.message);
   }
 });
 

@@ -13,12 +13,14 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   getAuthorizationStatus,
   getIsLoadingStatus,
+  getMyList,
   getSelectedFilm,
   getSimilarFilms,
 } from "./../../store/selectors";
 import { fetchSelectedFilm } from "../../store/api-actions";
 import { AppDispatch } from "../../types/store";
 import FilmsList from "./../../components/FilmsList";
+import FavoriteButton from "../../components/FavoriteButton/FavoriteButton";
 
 const Film = () => {
   const id = Number(window.location.href.split("/").at(-1));
@@ -42,10 +44,6 @@ const Film = () => {
 
   const handlePlay = () => {
     navigate(`/player/${film?.id}`);
-  };
-
-  const handleSeeList = () => {
-    navigate(AppRoute.MyList);
   };
 
   const addReview = () => {
@@ -95,17 +93,11 @@ const Film = () => {
                   </svg>
                   <span>Play</span>
                 </button>
-                <button
-                  className="btn btn--list film-card__button"
-                  type="button"
-                  onClick={handleSeeList}
-                >
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">{"777"}</span>
-                </button>
+                <FavoriteButton
+                  id={id}
+                  film={film}
+                  authorizationStatus={authorizationStatus}
+                />
                 {authorizationStatus == AuthorizationStatus.Auth && (
                   <span className="btn film-card__button" onClick={addReview}>
                     Add review

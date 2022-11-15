@@ -7,7 +7,7 @@ import MyList from "./../../pages/MyList/MyList";
 import Film from "./../../pages/Film/Film";
 import AddReview from "./../../pages/AddReview/AddReview";
 import Player from "./../../pages/Player/Player";
-import { AppRoute, AuthorizationStatus } from "../../const";
+import { AppRoute } from "../../const";
 import PrivateRoute from "./../../private-route/PrivateRoute";
 import { checkAuthStatus, fetchMyList } from "./../../store/api-actions";
 import { useDispatch } from "react-redux";
@@ -45,10 +45,7 @@ function App(): JSX.Element {
             }
           />
         </Route>
-        <Route
-          path={AppRoute.PlayerId}
-          element={<Player videoUrl={"testurl"} />}
-        />
+        <Route path={AppRoute.PlayerId} element={<Player />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
