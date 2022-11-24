@@ -1,13 +1,7 @@
 import React from "react";
 import FormReview from "./FormReview/FormReview";
 import { useSelector, useDispatch } from "react-redux";
-import { APIRoute, AppRoute } from "../../const";
-import { Link } from "react-router-dom";
-import AuthInfoBlock from "../../components/AuthInfoBlock/AuthInfoBlock";
-import {
-  getAuthorizationStatus,
-  getSelectedFilm,
-} from "./../../store/selectors";
+import { getSelectedFilm } from "./../../store/selectors";
 import { AppDispatch } from "../../types/store";
 import { fetchSelectedFilm } from "../../store/api-actions";
 import Stars from "../../components/Stars/Stars";

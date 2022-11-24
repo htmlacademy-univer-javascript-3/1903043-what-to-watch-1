@@ -1,7 +1,7 @@
 import React from "react";
 import "./../../notFound.scss";
 import { NotFoundAnim } from "./NotFoundAnim.jsx";
-import { Link } from "react-router-dom";
+import CustomLink from "./../../custom-link/CustomLink";
 
 export function NotFound() {
   React.useEffect(() => {
@@ -188,9 +188,9 @@ export function NotFound() {
               </div>
             </div>
           </div>
-          <Link to="/" className="button button-home">
+          <CustomLink to="/" className="button button-home">
             GO HOME
-          </Link>
+          </CustomLink>
         </div>
 
         <div className="sorry">Oops! Sorry, page not found.</div>

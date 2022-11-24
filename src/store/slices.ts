@@ -1,13 +1,53 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AuthorizationStatus, FilmGenres, LoadingStatus } from "../const";
-import { removeToken } from "../services/token";
+import {
+  AuthorizationStatus,
+  CountFilmsShown,
+  FilmGenres,
+  LoadingStatus,
+} from "../const";
+import { removeToken, saveToken } from "../services/token";
 import { filmType } from "../types/filmType";
+
+const userSlice = createSlice({
+  name: "user",
+  initialState: {
+    avatarUrl: "",
+    email: "",
+    id: 0,
+    name: "",
+    token: "",
+    authorizationStatus: AuthorizationStatus.Unknown,
+  },
+  reducers: {
+    failedAuthorization(state) {
+      state.authorizationStatus = AuthorizationStatus.NoAuth;
+    },
+    signOut(state) {
+      state.authorizationStatus = AuthorizationStatus.NoAuth;
+      state.avatarUrl = "";
+      state.email = "";
+      state.id = 0;
+      state.name = "";
+      state.token = "";
+      removeToken();
+    },
+    setUser(state, action) {
+      const { avatarUrl, email, id, name, token } = action.payload;
+      state.avatarUrl = avatarUrl;
+      state.email = email;
+      state.id = id;
+      state.name = name;
+      state.token = token;
+      state.authorizationStatus = AuthorizationStatus.Auth;
+      saveToken(token);
+    },
+  },
+});
 
 const statusesSlice = createSlice({
   name: "statuses",
   initialState: {
     isLoading: LoadingStatus.True,
-    authorizationStatus: AuthorizationStatus.Unknown,
   },
   reducers: {
     setLoadingTrue(state) {
@@ -18,13 +58,6 @@ const statusesSlice = createSlice({
     },
     setLoadingError(state) {
       state.isLoading = LoadingStatus.Error;
-    },
-    requireAuthorize(state, action) {
-      state.authorizationStatus = action.payload;
-    },
-    signOut(state) {
-      state.authorizationStatus = AuthorizationStatus.NoAuth;
-      removeToken();
     },
   },
 });
@@ -41,7 +74,7 @@ const myListSlice = createSlice({
     addFilmToMyList(state: any, action) {
       state.myList = [...state.myList, action.payload];
     },
-    deleteFilmFromMyList(state: any, action) {
+    deleteFilmFromMyList(state, action) {
       state.myList = state.myList.filter(
         (film: filmType) => film.id !== action.payload.id
       );
@@ -62,6 +95,23 @@ const selectedFilmSlice = createSlice({
     setSimilarFilms(state, action) {
       state.similarFilms = action.payload;
     },
+    refreshFilmFavoriteStatus(state: any) {
+      if (state.film) {
+        state.film.isFavorite = false;
+      }
+    },
+  },
+});
+
+const promoFilmSlice = createSlice({
+  name: "promoFilm",
+  initialState: {
+    film: null,
+  },
+  reducers: {
+    setPromoFilm(state, action) {
+      state.film = action.payload;
+    },
   },
 });
 
@@ -70,7 +120,7 @@ const filmsSlice = createSlice({
   initialState: {
     baseFilms: [],
     filteredFilms: [],
-    countFilmsShown: 8,
+    countFilmsShown: CountFilmsShown,
     genre: FilmGenres.All,
   },
   reducers: {
@@ -99,25 +149,33 @@ const filmsSlice = createSlice({
       }
     },
     showMoreFilms(state) {
-      state.countFilmsShown += 8;
+      state.countFilmsShown += CountFilmsShown;
+    },
+    resetCountFilmsShown(state) {
+      state.countFilmsShown = CountFilmsShown;
     },
   },
 });
 
-export const {
-  requireAuthorize,
-  signOut,
-  setLoadingTrue,
-  setLoadingFalse,
-  setLoadingError,
-} = statusesSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, setLoadingError } =
+  statusesSlice.actions;
 export const { setMyList, addFilmToMyList, deleteFilmFromMyList } =
   myListSlice.actions;
-export const { setFilm, setSimilarFilms } = selectedFilmSlice.actions;
-export const { setGenre, setFilms, changeFilmValues, showMoreFilms } =
-  filmsSlice.actions;
+export const { setFilm, refreshFilmFavoriteStatus, setSimilarFilms } =
+  selectedFilmSlice.actions;
+export const {
+  setGenre,
+  setFilms,
+  changeFilmValues,
+  showMoreFilms,
+  resetCountFilmsShown,
+} = filmsSlice.actions;
+export const { setPromoFilm } = promoFilmSlice.actions;
+export const { signOut, failedAuthorization, setUser } = userSlice.actions;
 
 export const statusesReducer = statusesSlice.reducer;
 export const myListReducer = myListSlice.reducer;
 export const selectedFilmReducer = selectedFilmSlice.reducer;
 export const filmsReducer = filmsSlice.reducer;
+export const promoFilmReducer = promoFilmSlice.reducer;
+export const userReducer = userSlice.reducer;

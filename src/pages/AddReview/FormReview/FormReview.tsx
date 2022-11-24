@@ -1,5 +1,5 @@
-import React from "react";
-import { APIRoute, AppRoute } from "../../../const";
+import React, { ChangeEvent } from "react";
+import { APIRoute } from "../../../const";
 import { createAPI } from "./../../../services/api";
 import { useNavigate } from "react-router-dom";
 
@@ -34,7 +34,7 @@ const FormReview = ({ rating, id }: propsType) => {
     setIsFormDisabled(false);
   };
 
-  const handleTextarea = (e: any) => {
+  const handleTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setReview(e.target.value);
   };
 

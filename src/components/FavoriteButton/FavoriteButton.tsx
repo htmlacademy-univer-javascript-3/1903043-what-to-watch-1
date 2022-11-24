@@ -1,12 +1,15 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFilmFromFavorite } from "../../store/api-actions";
+import {
+  deleteFilmFromFavorite,
+  fetchPromoFilm,
+} from "../../store/api-actions";
 import { AppDispatch } from "../../types/store";
 import { useNavigate } from "react-router-dom";
 import { AppRoute, AuthorizationStatus } from "../../const";
 import { addFilmToFavorite } from "./../../store/api-actions";
 import { filmType } from "../../types/filmType";
-import { getMyList } from "./../../store/selectors";
+import { getMyList, getPromoFilm } from "./../../store/selectors";
 
 type propsType = {
   id: number;
@@ -15,22 +18,29 @@ type propsType = {
 };
 
 const FavoriteButton = ({ id, film, authorizationStatus }: propsType) => {
+  const isPromoFilm = useSelector((state) => getPromoFilm(state))?.id == id;
   const myList = useSelector((state) => getMyList(state));
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleDeleteFilm = () => {
+  const handleDeleteFilm = async () => {
     if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(deleteFilmFromFavorite({ id }));
+      await dispatch(deleteFilmFromFavorite({ id }));
+      if (isPromoFilm) {
+        dispatch(fetchPromoFilm());
+      }
     } else {
       navigate(AppRoute.Login);
     }
   };
 
-  const handleAddFilm = () => {
+  const handleAddFilm = async () => {
     if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(addFilmToFavorite({ id }));
+      await dispatch(addFilmToFavorite({ id }));
+      if (isPromoFilm) {
+        dispatch(fetchPromoFilm());
+      }
     } else {
       navigate(AppRoute.Login);
     }

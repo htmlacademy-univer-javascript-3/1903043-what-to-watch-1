@@ -1,16 +1,17 @@
 import React from "react";
-import Card from "./Card";
-import { filmType } from "../types/filmType";
-import LoadingSpinner from "./LoadingSpinner";
+import Card from "../Card/Card";
+import { filmType } from "../../types/filmType";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {
   getCountFilmsShown,
   getFilmsByGenre,
   getIsLoadingStatus,
   getSimilarFilms,
-} from "../store/selectors";
+} from "../../store/selectors";
 import { useSelector, useDispatch } from "react-redux";
-import { LoadingStatus, WhereFilmsList } from "../const";
-import { AppDispatch } from "../types/store";
+import { LoadingStatus, WhereFilmsList } from "../../const";
+import { AppDispatch } from "../../types/store";
+import { getMyList } from "./../../store/selectors";
 
 type propsType = {
   whereFilmsList: WhereFilmsList;
@@ -22,14 +23,16 @@ const FilmsList = ({ whereFilmsList }: propsType) => {
     if (whereFilmsList == WhereFilmsList.OnMainPage) {
       return getFilmsByGenre(state);
     }
+    if (whereFilmsList == WhereFilmsList.OnMyList) {
+      return getMyList(state);
+    }
     if (whereFilmsList == WhereFilmsList.SimilarFilms) {
       return getSimilarFilms(state);
     }
     return [];
   });
-  const isLoading = useSelector((state) => getIsLoadingStatus(state));
 
-  const selectedFilm = useDispatch<AppDispatch>();
+  const isLoading = useSelector((state) => getIsLoadingStatus(state));
   const [activeFilm, setActiveFilm] = React.useState<number | null>(null);
 
   React.useEffect(() => {

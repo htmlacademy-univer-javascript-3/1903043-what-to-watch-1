@@ -2,34 +2,35 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AppRoute, AuthorizationStatus } from "../../const";
-import { signOut } from "../../store/slices";
 import { AppDispatch } from "../../types/store";
-import { Link } from "react-router-dom";
-import { getAuthorizationStatus } from "./../../store/selectors";
+import { getAuthorizationStatus, getUserData } from "./../../store/selectors";
+import CustomLink from "../../custom-link/CustomLink";
+import { signOutAction } from "../../store/api-actions";
 
 export const AuthInfoBlock = () => {
   const authorizationStatus = useSelector((state) =>
     getAuthorizationStatus(state)
   );
+  const { avatarUrl } = useSelector((state) => getUserData(state));
   const dispatch = useDispatch<AppDispatch>();
 
   const handleSignOut = () => {
-    dispatch(signOut());
+    dispatch(signOutAction());
   };
 
   return (
     <>
       <li className="user-block__item">
-        <Link to={AppRoute.MyList}>
+        <CustomLink to={AppRoute.MyList}>
           <div className="user-block__avatar">
             <img
-              src="img/avatar.jpg"
+              src={`${avatarUrl || "img/avatar.jpg"}`}
               alt="User avatar"
               width="63"
               height="63"
             />
           </div>
-        </Link>
+        </CustomLink>
       </li>
       <li className="user-block__item">
         {authorizationStatus == AuthorizationStatus.Auth ? (
@@ -37,9 +38,9 @@ export const AuthInfoBlock = () => {
             Sign out
           </span>
         ) : (
-          <Link to={AppRoute.Login} className="user-block__link">
+          <CustomLink to={AppRoute.Login} className="user-block__link">
             Sign in
-          </Link>
+          </CustomLink>
         )}
       </li>
     </>

@@ -1,5 +1,5 @@
 import React from "react";
-import FilmsList from "../../components/FilmsList";
+import FilmsList from "../../components/FilmsList/FilmsList";
 import ListGenres from "./../../components/ListGenres/ListGenres";
 import { AppDispatch } from "../../types/store";
 import { useDispatch } from "react-redux";
@@ -7,12 +7,14 @@ import { fetchFilms } from "../../store/api-actions";
 import FilmCardOnMain from "./../../components/FilmCardOnMain/FilmCardOnMain";
 import ShowMoreButton from "../../components/ShowMoreButton/ShowMoreButton";
 import { WhereFilmsList } from "../../const";
+import { fetchPromoFilm } from "./../../store/api-actions";
 
 const Main = function () {
   const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
     dispatch(fetchFilms());
+    dispatch(fetchPromoFilm());
   }, []);
 
   return (

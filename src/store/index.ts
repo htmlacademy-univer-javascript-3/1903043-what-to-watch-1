@@ -2,8 +2,10 @@ import { configureStore } from "@reduxjs/toolkit";
 import {
   filmsReducer,
   myListReducer,
+  promoFilmReducer,
   selectedFilmReducer,
   statusesReducer,
+  userReducer,
 } from "./slices";
 import { createAPI } from "../services/api";
 
@@ -15,6 +17,8 @@ export default configureStore({
     selectedFilm: selectedFilmReducer,
     myList: myListReducer,
     statuses: statusesReducer,
+    promoFilm: promoFilmReducer,
+    user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

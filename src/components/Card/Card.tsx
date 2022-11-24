@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { filmType } from "../types/filmType";
-import VideoPlayer from "./VideoPlayer";
+import CustomLink from "../../custom-link/CustomLink";
+import { filmType } from "../../types/filmType";
+import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
 type typeProps = {
   film: filmType;
@@ -32,14 +32,14 @@ function Card({ film, handleMouseOverFilm, isPlaying }: typeProps) {
       {isPlaying ? (
         <VideoPlayer src={previewVideoLink} muted autoPlay />
       ) : (
-        <Link to={`/films/${id}`} className="film-link">
+        <CustomLink to={`/films/${id}`} className="film-link">
           <div className="small-film-card__image">
             <img src={previewImage} alt={name} width="280" height="175" />
           </div>
           <h3 className="small-film-card__title">
             <span className="small-film-card__link">{name}</span>
           </h3>
-        </Link>
+        </CustomLink>
       )}
     </article>
   );
