@@ -31,6 +31,8 @@ export enum APIRoute {
   Favorite = "/favorite",
   Comments = "/comments",
   NotFound = "/page-404",
+  PromoFilm = "/promo",
+  LogOut = "/logout",
 }
 
 export enum AuthorizationStatus {
@@ -48,6 +50,7 @@ export enum LoadingStatus {
 export enum WhereFilmsList {
   OnMainPage = "ON_MAIN_PAGE",
   SimilarFilms = "SIMILAR_FILMS",
+  OnMyList = "ON_MY_LIST",
 }
 
 export enum NameAssesment {
@@ -57,3 +60,5 @@ export enum NameAssesment {
   VeryGood = "Very good",
   Awesome = "Awesome",
 }
+
+export const CountFilmsShown = 8;

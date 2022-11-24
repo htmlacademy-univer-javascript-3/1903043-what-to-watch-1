@@ -14,8 +14,10 @@ const PrivateRoute = ({ children }: privateRouteProp) => {
   );
   return authorizationStatus == AuthorizationStatus.Auth ? (
     children
-  ) : (
+  ) : authorizationStatus == AuthorizationStatus.NoAuth ? (
     <Navigate to={AppRoute.Login} />
+  ) : (
+    <></>
   );
 };
 

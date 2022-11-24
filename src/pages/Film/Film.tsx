@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import FilmTab from "./../../components/FilmTab/";
 import {
   APIRoute,
@@ -13,14 +13,14 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   getAuthorizationStatus,
   getIsLoadingStatus,
-  getMyList,
   getSelectedFilm,
   getSimilarFilms,
 } from "./../../store/selectors";
 import { fetchSelectedFilm } from "../../store/api-actions";
 import { AppDispatch } from "../../types/store";
-import FilmsList from "./../../components/FilmsList";
+import FilmsList from "../../components/FilmsList/FilmsList";
 import FavoriteButton from "../../components/FavoriteButton/FavoriteButton";
+import CustomLink from "./../../custom-link/CustomLink";
 
 const Film = () => {
   const id = Number(window.location.href.split("/").at(-1));
@@ -62,11 +62,11 @@ const Film = () => {
 
           <header className="page-header film-card__head">
             <div className="logo">
-              <Link to="/" className="logo__link">
+              <CustomLink to="/" className="logo__link">
                 <span className="logo__letter logo__letter--1">W</span>
                 <span className="logo__letter logo__letter--2">T</span>
                 <span className="logo__letter logo__letter--3">W</span>
-              </Link>
+              </CustomLink>
             </div>
 
             <ul className="user-block">

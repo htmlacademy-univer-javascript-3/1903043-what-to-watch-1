@@ -2,17 +2,11 @@ import React from "react";
 import AuthInfoBlock from "../AuthInfoBlock/AuthInfoBlock";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {
-  getAuthorizationStatus,
-  getFilmsByGenre,
-  getMyList,
-} from "./../../store/selectors";
+import { getAuthorizationStatus, getPromoFilm } from "./../../store/selectors";
 import FavoriteButton from "../FavoriteButton/FavoriteButton";
 
 const FilmCardOnMain = () => {
-  const film = useSelector((state) => getFilmsByGenre(state))
-    ? useSelector((state) => getFilmsByGenre(state))[0]
-    : null;
+  const film = useSelector((state) => getPromoFilm(state));
   const authorizationStatus = useSelector((state) =>
     getAuthorizationStatus(state)
   );

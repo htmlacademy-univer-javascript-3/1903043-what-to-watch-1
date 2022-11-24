@@ -1,8 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { APIRoute, AppRoute } from "../../const";
 import { filmType } from "../../types/filmType";
 import { AuthInfoBlock } from "./../AuthInfoBlock/AuthInfoBlock";
+import CustomLink from "./../../custom-link/CustomLink";
 
 type propsType = {
   film: filmType | null;
@@ -20,22 +20,22 @@ const FilmCardOnAddReview = ({ film, id }: propsType) => {
 
       <header className="page-header">
         <div className="logo">
-          <Link to={AppRoute.Main} className="logo__link">
+          <CustomLink to={AppRoute.Main} className="logo__link">
             <span className="logo__letter logo__letter--1">W</span>
             <span className="logo__letter logo__letter--2">T</span>
             <span className="logo__letter logo__letter--3">W</span>
-          </Link>
+          </CustomLink>
         </div>
 
         <nav className="breadcrumbs">
           <ul className="breadcrumbs__list">
             <li className="breadcrumbs__item">
-              <Link
+              <CustomLink
                 to={`${APIRoute.Films}/${id}`}
                 className="breadcrumbs__link"
               >
                 {film?.name}
-              </Link>
+              </CustomLink>
             </li>
             <li className="breadcrumbs__item">
               <span className="breadcrumbs__link">Add review</span>

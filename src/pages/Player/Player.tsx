@@ -4,15 +4,18 @@ import { fetchSelectedFilm } from "../../store/api-actions";
 import { AppDispatch } from "../../types/store";
 import { getIsLoadingStatus, getSelectedFilm } from "./../../store/selectors";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { LoadingStatus } from "../../const";
 
 const Player = () => {
   const id = Number(window.location.href.split("/").at(-1));
   const film = useSelector((state) => getSelectedFilm(state));
-  const videoRef: any = React.useRef();
-  const timeValueRef: any = React.useRef();
-  const buttonPlayRef: any = React.useRef();
-  const progressBarRef: any = React.useRef();
+  const videoRef: React.RefObject<any> = React.useRef();
+  const timeValueRef: React.RefObject<any> = React.useRef();
+  const buttonPlayRef: React.RefObject<any> = React.useRef();
+  const progressBarRef: React.RefObject<any> = React.useRef();
   const [isPlaying, setIsPlaying] = React.useState(false);
+  const isLoading = useSelector((state) => getIsLoadingStatus(state));
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -41,7 +44,7 @@ const Player = () => {
     }
   };
 
-  const getRemainingTime = (): string => {
+  const getRemainingTime = () => {
     if (!videoRef.current) return "";
     const allSeconds = Math.round(
       videoRef.current.duration - videoRef.current.currentTime
@@ -70,6 +73,7 @@ const Player = () => {
   };
 
   const handleTimeUpDateVideo = () => {
+    console.log("handleTimeUp");
     timeValueRef.current.innerHTML = getRemainingTime();
     var value =
       (100 / videoRef.current.duration) * videoRef.current.currentTime;
@@ -85,83 +89,87 @@ const Player = () => {
 
   return (
     <>
-      <div className="player">
-        <video
-          src={film?.videoLink}
-          className="player__video"
-          poster={film?.posterImage}
-          ref={videoRef}
-          onTimeUpdate={handleTimeUpDateVideo}
-        ></video>
+      {isLoading == LoadingStatus.True ? (
+        <LoadingSpinner />
+      ) : (
+        <div className="player">
+          <video
+            src={film?.videoLink}
+            className="player__video"
+            poster={film?.posterImage}
+            ref={videoRef}
+            onTimeUpdate={handleTimeUpDateVideo}
+          ></video>
 
-        <button type="button" className="player__exit" onClick={handleExit}>
-          Exit
-        </button>
+          <button type="button" className="player__exit" onClick={handleExit}>
+            Exit
+          </button>
 
-        <div className="player__controls">
-          <div className="player__controls-row">
-            <div className="player__time">
-              <input
-                className="player__progress"
-                value="0"
-                max="100"
-                ref={progressBarRef}
-                onChange={handleChangeProgressBar}
-                type="range"
-              />
+          <div className="player__controls">
+            <div className="player__controls-row">
+              <div className="player__time">
+                <input
+                  className="player__progress"
+                  value="0"
+                  max="100"
+                  ref={progressBarRef}
+                  onChange={handleChangeProgressBar}
+                  type="range"
+                />
+              </div>
+              <div className="player__time-value" ref={timeValueRef}>
+                {}
+              </div>
             </div>
-            <div className="player__time-value" ref={timeValueRef}>
-              {getRemainingTime()}
+
+            <div className="player__controls-row">
+              <button
+                type="button"
+                className="player__play"
+                onClick={handlePlay}
+                ref={buttonPlayRef}
+              >
+                {isPlaying ? (
+                  <>
+                    <svg
+                      width="30"
+                      height="30"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2"
+                      fill="#EEE5B5"
+                    >
+                      {" "}
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />{" "}
+                      <rect x="6" y="5" width="4" height="14" rx="1" />{" "}
+                      <rect x="14" y="5" width="4" height="14" rx="1" />{" "}
+                    </svg>
+                    <span>Play</span>
+                  </>
+                ) : (
+                  <>
+                    <svg viewBox="0 0 19 19" width="19" height="19">
+                      <use xlinkHref="#play-s"></use>
+                    </svg>
+                    <span>Pause</span>
+                  </>
+                )}
+              </button>
+              <div className="player__name">{isPlaying ? "Pause" : "Play"}</div>
+
+              <button
+                type="button"
+                className="player__full-screen"
+                onClick={handleFullScreen}
+              >
+                <svg viewBox="0 0 27 27" width="27" height="27">
+                  <use xlinkHref="#full-screen"></use>
+                </svg>
+                <span>Full screen</span>
+              </button>
             </div>
-          </div>
-
-          <div className="player__controls-row">
-            <button
-              type="button"
-              className="player__play"
-              onClick={handlePlay}
-              ref={buttonPlayRef}
-            >
-              {isPlaying ? (
-                <>
-                  <svg
-                    width="30"
-                    height="30"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    fill="#EEE5B5"
-                  >
-                    {" "}
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />{" "}
-                    <rect x="6" y="5" width="4" height="14" rx="1" />{" "}
-                    <rect x="14" y="5" width="4" height="14" rx="1" />{" "}
-                  </svg>
-                  <span>Play</span>
-                </>
-              ) : (
-                <>
-                  <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s"></use>
-                  </svg>
-                  <span>Pause</span>
-                </>
-              )}
-            </button>
-            <div className="player__name">{isPlaying ? "Pause" : "Play"}</div>
-
-            <button
-              type="button"
-              className="player__full-screen"
-              onClick={handleFullScreen}
-            >
-              <svg viewBox="0 0 27 27" width="27" height="27">
-                <use xlinkHref="#full-screen"></use>
-              </svg>
-              <span>Full screen</span>
-            </button>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

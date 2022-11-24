@@ -12,6 +12,17 @@ const FilmTabReviews = ({ id }: propsType) => {
   const api = createAPI();
   const [comments, setComments] = React.useState<comment[]>([]);
 
+  const getFormatedDate = (inputDate: string): string => {
+    const [year, month, number] = inputDate
+      .substring(0, inputDate.indexOf("T"))
+      .split("-")
+      .map((i) => +i);
+    const monthName = new Date(year, month - 1, number).toLocaleString("en", {
+      month: "long",
+    });
+    return `${monthName} ${number}, ${year}`;
+  };
+
   React.useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -19,7 +30,6 @@ const FilmTabReviews = ({ id }: propsType) => {
           `${APIRoute.Comments}/${id}`
         );
         setComments(commentsData);
-        console.log(commentsData);
       } catch (error: any) {
         console.log(error.mistake);
       }
@@ -38,7 +48,7 @@ const FilmTabReviews = ({ id }: propsType) => {
               <footer className="review__details">
                 <cite className="review__author">{comment.user.name}</cite>
                 <time className="review__date" dateTime={comment.date}>
-                  {comment.date}
+                  {getFormatedDate(comment.date)}
                 </time>
               </footer>
             </blockquote>
@@ -56,7 +66,7 @@ const FilmTabReviews = ({ id }: propsType) => {
               <footer className="review__details">
                 <cite className="review__author">{comment.user.name}</cite>
                 <time className="review__date" dateTime={comment.date}>
-                  {comment.date}
+                  {getFormatedDate(comment.date)}
                 </time>
               </footer>
             </blockquote>
