@@ -31,11 +31,11 @@ const FilmTabDetails = ({
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Starring</strong>
           <span className="film-card__details-value">
-            {starring.map((star) => (
-              <>
+            {starring.map((star, i) => (
+              <div key={i}>
                 {star}
                 <br />
-              </>
+              </div>
             ))}
           </span>
         </p>

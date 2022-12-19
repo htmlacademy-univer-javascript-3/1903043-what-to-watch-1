@@ -40,8 +40,8 @@ const FilmTabReviews = ({ id }: propsType) => {
   return (
     <div className="film-card__reviews film-card__row">
       <div className="film-card__reviews-col">
-        {comments.slice(0, (comments.length + 1) / 2).map((comment) => (
-          <div className="review">
+        {comments.slice(0, (comments.length + 1) / 2).map((comment, i) => (
+          <div className="review" key={i}>
             <blockquote className="review__quote">
               <p className="review__text">{comment.comment}</p>
 
@@ -58,8 +58,8 @@ const FilmTabReviews = ({ id }: propsType) => {
         ))}
       </div>
       <div className="film-card__reviews-col">
-        {comments.slice((comments.length + 1) / 2).map((comment) => (
-          <div className="review">
+        {comments.slice((comments.length + 1) / 2).map((comment, i) => (
+          <div className="review" key={i}>
             <blockquote className="review__quote">
               <p className="review__text">{comment.comment}</p>
 

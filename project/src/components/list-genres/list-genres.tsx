@@ -20,6 +20,7 @@ const ListGenres = () => {
             activeGenre === genre && "catalog__genres-item--active"
           }`}
           onClick={() => onClickGenre(genre)}
+          key={genre}
         >
           <a className="catalog__genres-link">{genre}</a>
         </li>

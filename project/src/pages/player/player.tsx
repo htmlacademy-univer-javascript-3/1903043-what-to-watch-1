@@ -14,7 +14,7 @@ const Player = () => {
   const timeValueRef: React.RefObject<any> = React.useRef();
   const buttonPlayRef: React.RefObject<any> = React.useRef();
   const progressBarRef: React.RefObject<any> = React.useRef();
-  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [isPlaying, setIsPlaying] = React.useState(true);
   const isLoading = useSelector((state) => getIsLoadingStatus(state));
   const [originalTime, setOriginalTime] = React.useState("");
 
@@ -94,7 +94,6 @@ const Player = () => {
   };
 
   const handleTimeUpDateVideo = () => {
-    console.log("handleTimeUp");
     timeValueRef.current.innerHTML = getRemainingTime();
     var value =
       (100 / videoRef.current.duration) * videoRef.current.currentTime;
@@ -120,6 +119,8 @@ const Player = () => {
             poster={film?.posterImage}
             ref={videoRef}
             onTimeUpdate={handleTimeUpDateVideo}
+            muted
+            autoPlay
           ></video>
 
           <button type="button" className="player__exit" onClick={handleExit}>
