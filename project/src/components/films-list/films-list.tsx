@@ -38,8 +38,8 @@ const FilmsList = ({ whereFilmsList }: propsType) => {
   React.useEffect(() => {
     const handleMouseOver = (e: any) => {
       if (
-        !e.target.parentElement.classList.contains("small-film-card") &&
-        !e.target.parentElement.classList.contains("film-link")
+        !e?.target?.parentElement?.classList?.contains("small-film-card") &&
+        !e?.target?.parentElement?.classList?.contains("film-link")
       ) {
         setActiveFilm(null);
       }

@@ -21,6 +21,7 @@ const FilmTab = ({ film }: propsType) => {
                 filmTabName == activeTab ? "film-nav__item--active" : ""
               }`}
               onClick={() => setActiveTab(filmTabName)}
+              key={filmTabName}
             >
               <a className="film-nav__link">{filmTabName}</a>
             </li>

@@ -20,11 +20,13 @@ type propsType = {
 const FavoriteButton = ({ id, film, authorizationStatus }: propsType) => {
   const isPromoFilm = useSelector((state) => getPromoFilm(state))?.id == id;
   const myList = useSelector((state) => getMyList(state));
+  const [isButtonDisabled, setIsButtonDisabled] = React.useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
 
   const handleDeleteFilm = async () => {
+    setIsButtonDisabled(true);
     if (authorizationStatus === AuthorizationStatus.Auth) {
       await dispatch(deleteFilmFromFavorite({ id }));
       if (isPromoFilm) {
@@ -33,9 +35,13 @@ const FavoriteButton = ({ id, film, authorizationStatus }: propsType) => {
     } else {
       navigate(AppRoute.Login);
     }
+    setIsButtonDisabled(false);
   };
 
   const handleAddFilm = async () => {
+    if (getIsFilmAddedOnMyList()) return;
+
+    setIsButtonDisabled(true);
     if (authorizationStatus === AuthorizationStatus.Auth) {
       await dispatch(addFilmToFavorite({ id }));
       if (isPromoFilm) {
@@ -44,6 +50,13 @@ const FavoriteButton = ({ id, film, authorizationStatus }: propsType) => {
     } else {
       navigate(AppRoute.Login);
     }
+    setIsButtonDisabled(false);
+  };
+
+  // this method needs for fast clicks on add buttons, when
+  // state doesn't have time to update
+  const getIsFilmAddedOnMyList = () => {
+    return myList.some((film) => film.id === id);
   };
 
   return (
@@ -53,6 +66,7 @@ const FavoriteButton = ({ id, film, authorizationStatus }: propsType) => {
           className="btn btn--list film-card__button"
           type="button"
           onClick={handleDeleteFilm}
+          disabled={isButtonDisabled}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -73,6 +87,7 @@ const FavoriteButton = ({ id, film, authorizationStatus }: propsType) => {
           className="btn btn--list film-card__button"
           type="button"
           onClick={handleAddFilm}
+          disabled={isButtonDisabled}
         >
           <svg viewBox="0 0 19 20" width="19" height="20">
             <use xlinkHref="#add"></use>
